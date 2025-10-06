@@ -1,4 +1,4 @@
-import { Music, Youtube, Instagram, Mail, Heart } from 'lucide-react'
+import { Music as MusicIcon, Youtube, Instagram, Mail, Heart } from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -8,7 +8,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
-              <Music className="h-8 w-8 text-primary" />
+              <MusicIcon className="h-8 w-8 text-primary" />
               <span className="text-2xl font-bold">Mia Farnese</span>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">

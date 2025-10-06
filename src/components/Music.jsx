@@ -1,4 +1,4 @@
-import { Play, Youtube, Music, Headphones } from 'lucide-react'
+import { Play, Youtube, Music as MusicIcon, Headphones } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
@@ -83,7 +83,7 @@ export default function Music() {
                 </div>
                 <div className="mt-4">
                   <Badge variant="secondary" className="w-full justify-center">
-                    <Music className="h-3 w-3 mr-1" />
+                    <MusicIcon className="h-3 w-3 mr-1" />
                     {performance.status}
                   </Badge>
                 </div>

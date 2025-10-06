@@ -1,4 +1,4 @@
-import { Camera, Award, Music, Users } from 'lucide-react'
+import { Camera, Award, Music as MusicIcon, Users } from 'lucide-react'
 import { Card, CardContent } from './ui/card'
 import { Badge } from './ui/badge'
 
@@ -15,7 +15,7 @@ export default function Gallery() {
       title: "6th Grade Debut Performance",
       description: "Mia's very first stage appearance",
       category: "Performances",
-      icon: Music,
+      icon: MusicIcon,
       placeholder: "Stage Performance"
     },
     {
@@ -36,7 +36,7 @@ export default function Gallery() {
       title: "Music Studio Time",
       description: "Recording and creating music",
       category: "Studio",
-      icon: Music,
+      icon: MusicIcon,
       placeholder: "Studio Session"
     },
     {
@@ -94,7 +94,7 @@ export default function Gallery() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Badge variant="secondary" className="text-sm px-4 py-2">
-                  <Music className="h-4 w-4 mr-2" />
+                  <MusicIcon className="h-4 w-4 mr-2" />
                   Performance Photos
                 </Badge>
                 <Badge variant="secondary" className="text-sm px-4 py-2">

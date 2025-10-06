@@ -1,4 +1,4 @@
-import { Play, Music, Guitar } from 'lucide-react'
+import { Play, Music as MusicIcon, Guitar } from 'lucide-react'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 
@@ -11,7 +11,7 @@ export default function Hero() {
           <div className="text-center lg:text-left">
             <div className="flex flex-wrap justify-center lg:justify-start gap-2 mb-6">
               <Badge variant="secondary" className="text-sm">
-                <Music className="h-3 w-3 mr-1" />
+                <MusicIcon className="h-3 w-3 mr-1" />
                 Singer
               </Badge>
               <Badge variant="secondary" className="text-sm">
@@ -48,7 +48,7 @@ export default function Hero() {
             <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
               <div className="text-center">
                 <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
-                  <Music className="h-16 w-16 text-white" />
+                  <MusicIcon className="h-16 w-16 text-white" />
                 </div>
                 <p className="text-muted-foreground">Mia Farnese</p>
                 <p className="text-sm text-muted-foreground">Photo Coming Soon</p>

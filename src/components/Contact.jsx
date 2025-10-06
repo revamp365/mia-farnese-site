@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Calendar, Music, Star } from 'lucide-react'
+import { Mail, Phone, MapPin, Calendar, Music as MusicIcon, Star } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
@@ -72,7 +72,7 @@ export default function Contact() {
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <Music className="h-5 w-5 text-primary mt-1" />
+                    <MusicIcon className="h-5 w-5 text-primary mt-1" />
                     <div>
                       <p className="font-medium">Musical Styles</p>
                       <p className="text-muted-foreground text-sm">
@@ -157,7 +157,7 @@ export default function Contact() {
               </p>
               <div className="flex justify-center space-x-6">
                 <Button variant="outline" size="lg" className="flex items-center">
-                  <Music className="h-5 w-5 mr-2" />
+                  <MusicIcon className="h-5 w-5 mr-2" />
                   YouTube Channel
                 </Button>
                 <Button variant="outline" size="lg" className="flex items-center">

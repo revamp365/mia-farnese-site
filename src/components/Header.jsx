@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Menu, X, Music, Instagram, Youtube } from 'lucide-react'
+import { Menu, X, Music as MusicIcon, Instagram, Youtube } from 'lucide-react'
 import { Button } from './ui/button'
 
 export default function Header() {
@@ -19,7 +19,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <Music className="h-8 w-8 text-primary" />
+            <MusicIcon className="h-8 w-8 text-primary" />
             <span className="text-xl font-bold">Mia Farnese</span>
           </div>
 

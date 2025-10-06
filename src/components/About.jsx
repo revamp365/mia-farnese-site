@@ -1,4 +1,4 @@
-import { Award, Music, Guitar, Star } from 'lucide-react'
+import { Award, Music as MusicIcon, Guitar, Star } from 'lucide-react'
 import { Card, CardContent } from './ui/card'
 import { Badge } from './ui/badge'
 
