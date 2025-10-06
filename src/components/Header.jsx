@@ -8,80 +8,72 @@ export default function Header() {
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
     setIsMenuOpen(false)
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+    <header className="fixed top-0 left-0 right-0 z-50 glass-effect">
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <MusicIcon className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold">Mia Farnese</span>
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+              <span className="text-primary font-bold text-lg">MF</span>
+            </div>
+            <span className="text-2xl font-bold text-white">Mia Farnese</span>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-12">
             <button
               onClick={() => scrollToSection('home')}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-white hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider"
             >
-              Home
+              Homepage
             </button>
             <button
               onClick={() => scrollToSection('about')}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-white hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider"
             >
               About
             </button>
             <button
               onClick={() => scrollToSection('music')}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-white hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider"
             >
               Music
             </button>
             <button
               onClick={() => scrollToSection('gallery')}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-white hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider"
             >
-              Gallery
+              Photos
             </button>
             <button
               onClick={() => scrollToSection('contact')}
-              className="text-foreground hover:text-primary transition-colors"
+              className="text-white hover:text-primary transition-colors text-sm font-medium uppercase tracking-wider"
             >
               Contact
             </button>
           </nav>
 
-          {/* Social Links */}
-          <div className="hidden md:flex items-center space-x-4">
-            <a
-              href="https://www.youtube.com/@MiaEF10"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground hover:text-primary transition-colors"
+          {/* CTA Button */}
+          <div className="hidden md:flex items-center space-x-6">
+            <Button 
+              size="lg" 
+              className="bg-primary hover:bg-primary/90 text-black font-bold px-8 py-3 rounded-none"
             >
-              <Youtube className="h-5 w-5" />
-            </a>
-            <a
-              href="https://www.instagram.com/miaamusic_/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              <Instagram className="h-5 w-5" />
-            </a>
+              Buy Tickets
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden"
+            className="md:hidden text-white hover:bg-white/10"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
