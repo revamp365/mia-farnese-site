@@ -1,172 +1,173 @@
-import { Mail, Phone, MapPin, Calendar, Music as MusicIcon, Star } from 'lucide-react'
+import { Mail, Phone, MapPin, Calendar, Music as MusicIcon, Send } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
-import { Badge } from './ui/badge'
+import { Input } from './ui/input'
 
 export default function Contact() {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // Handle form submission
+    alert('Thank you for your message! We\'ll get back to you soon.')
+  }
+
   return (
-    <section id="contact" className="py-20">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">Get In Touch</h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Interested in booking Mia for performances, collaborations, or just want to say hello? 
-            We'd love to hear from you!
+    <section id="contact" className="py-24 bg-gradient-to-b from-black to-gray-900 relative">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}></div>
+      </div>
+
+      <div className="relative z-10 container mx-auto px-6">
+        <div className="text-center mb-20">
+          <h2 className="text-5xl lg:text-6xl font-bold mb-8 text-white">
+            <span className="gradient-text">Get In Touch</span>
+          </h2>
+          <p className="text-xl text-white/80 max-w-3xl mx-auto">
+            Ready to book Mia for your event or have questions about her music? We'd love to hear from you!
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Information */}
+        <div className="grid lg:grid-cols-2 gap-16">
+          {/* Contact Form */}
+          <Card className="glass-effect border-primary/30">
+            <CardHeader>
+              <CardTitle className="text-2xl text-white flex items-center">
+                <Mail className="h-6 w-6 mr-3 text-primary" />
+                Send us a message
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <Input
+                      placeholder="Your name"
+                      className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Input
+                      type="email"
+                      placeholder="Email address"
+                      className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
+                      required
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Input
+                    placeholder="Subject"
+                    className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
+                    required
+                  />
+                </div>
+                <div>
+                  <textarea
+                    placeholder="Tell us about your event or question..."
+                    rows={6}
+                    className="w-full px-3 py-2 bg-white/10 border border-white/30 text-white placeholder:text-white/70 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                    required
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full bg-primary hover:bg-primary/90 text-black font-bold py-3"
+                >
+                  <Send className="h-4 w-4 mr-2" />
+                  Send Message
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Contact Info & Booking */}
           <div className="space-y-8">
-            <Card>
+            {/* Contact Information */}
+            <Card className="glass-effect border-white/20">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Mail className="h-5 w-5 mr-2 text-primary" />
-                  Contact Information
-                </CardTitle>
+                <CardTitle className="text-xl text-white">Contact Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <Mail className="h-5 w-5 text-muted-foreground" />
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                    <Mail className="h-5 w-5 text-primary" />
+                  </div>
                   <div>
-                    <p className="font-medium">Email</p>
-                    <p className="text-muted-foreground">contact@mia-farnese.com</p>
+                    <p className="text-white/80 text-sm">Email</p>
+                    <p className="text-white font-medium">mia@mia-farnese.com</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Phone className="h-5 w-5 text-muted-foreground" />
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                    <Phone className="h-5 w-5 text-primary" />
+                  </div>
                   <div>
-                    <p className="font-medium">Phone</p>
-                    <p className="text-muted-foreground">Available upon request</p>
+                    <p className="text-white/80 text-sm">Phone</p>
+                    <p className="text-white font-medium">Available upon request</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <MapPin className="h-5 w-5 text-muted-foreground" />
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
+                    <MapPin className="h-5 w-5 text-primary" />
+                  </div>
                   <div>
-                    <p className="font-medium">Location</p>
-                    <p className="text-muted-foreground">Based in the United States</p>
+                    <p className="text-white/80 text-sm">Location</p>
+                    <p className="text-white font-medium">Available for events nationwide</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
+            {/* Booking Information */}
+            <Card className="glass-effect border-primary/30 bg-gradient-to-r from-primary/10 to-pink-500/10">
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Calendar className="h-5 w-5 mr-2 text-primary" />
+                <CardTitle className="text-xl text-white flex items-center">
+                  <Calendar className="h-6 w-6 mr-3 text-primary" />
                   Booking Information
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <Star className="h-5 w-5 text-primary mt-1" />
+                    <MusicIcon className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                     <div>
-                      <p className="font-medium">Performance Types</p>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        <Badge variant="outline">School Events</Badge>
-                        <Badge variant="outline">Talent Shows</Badge>
-                        <Badge variant="outline">Community Events</Badge>
-                        <Badge variant="outline">Private Functions</Badge>
-                      </div>
+                      <h4 className="text-white font-semibold mb-2">Performance Types</h4>
+                      <ul className="text-white/80 text-sm space-y-1">
+                        <li>• School talent shows and competitions</li>
+                        <li>• Community events and festivals</li>
+                        <li>• Private parties and celebrations</li>
+                        <li>• Fundraising events and galas</li>
+                      </ul>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <MusicIcon className="h-5 w-5 text-primary mt-1" />
+                    <Calendar className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                     <div>
-                      <p className="font-medium">Musical Styles</p>
-                      <p className="text-muted-foreground text-sm">
-                        Acoustic guitar and vocals, covers, and original music
+                      <h4 className="text-white font-semibold mb-2">Availability</h4>
+                      <p className="text-white/80 text-sm">
+                        Mia is available for bookings on weekends and during school breaks. 
+                        Please contact us at least 2 weeks in advance for event planning.
                       </p>
                     </div>
                   </div>
                 </div>
+                <Button 
+                  className="w-full mt-6 bg-primary hover:bg-primary/90 text-black font-bold"
+                  onClick={() => {
+                    const element = document.getElementById('contact')
+                    const form = element?.querySelector('form')
+                    form?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                  }}
+                >
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Request Booking
+                </Button>
               </CardContent>
             </Card>
           </div>
-
-          {/* Contact Form */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Send a Message</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                      placeholder="your@email.com"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                    placeholder="What's this about?"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={4}
-                    className="w-full px-3 py-2 border border-input rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                    placeholder="Tell us about your event or inquiry..."
-                  ></textarea>
-                </div>
-                <Button type="submit" className="w-full">
-                  <Mail className="h-4 w-4 mr-2" />
-                  Send Message
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Social Media Links */}
-        <div className="mt-16 text-center">
-          <Card className="max-w-2xl mx-auto bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold mb-4">Follow Mia's Journey</h3>
-              <p className="text-muted-foreground mb-6">
-                Stay updated with Mia's latest performances, practice sessions, and musical growth
-              </p>
-              <div className="flex justify-center space-x-6">
-                <Button variant="outline" size="lg" className="flex items-center">
-                  <MusicIcon className="h-5 w-5 mr-2" />
-                  YouTube Channel
-                </Button>
-                <Button variant="outline" size="lg" className="flex items-center">
-                  <Calendar className="h-5 w-5 mr-2" />
-                  Instagram
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </section>

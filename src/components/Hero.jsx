@@ -5,14 +5,22 @@ import { Badge } from './ui/badge'
 export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center hero-bg smoke-effect pt-20 overflow-hidden">
-      {/* Background Image */}
+      {/* Background Image - Responsive */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('https://i.imgur.com/xqXiC44.png')`,
+          backgroundImage: `url('https://i.imgur.com/J7GCxTv.png')`,
           backgroundPosition: 'center center'
         }}
       >
+        {/* Desktop Background - Hidden on mobile */}
+        <div 
+          className="hidden lg:block absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url('https://i.imgur.com/xqXiC44.png')`,
+            backgroundPosition: 'center center'
+          }}
+        ></div>
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
       
@@ -22,7 +30,7 @@ export default function Hero() {
           {/* Text Content */}
           <div className="text-center lg:text-left">
             <div className="mb-8">
-              <p className="text-primary text-lg font-medium mb-4">Hello! I am a singer</p>
+              <p className="text-primary text-lg font-medium mb-4">Meet the artist: </p>
               <h1 className="text-6xl lg:text-8xl font-bold text-white mb-6 leading-tight">
                 Mia Farnese
               </h1>
@@ -35,51 +43,47 @@ export default function Hero() {
               <Button 
                 size="lg" 
                 className="bg-primary hover:bg-primary/90 text-black font-bold px-12 py-4 text-lg rounded-none"
-                onClick={() => {
-                  const element = document.getElementById('music')
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                  }
-                }}
+                onClick={() => window.open('https://www.youtube.com/@MiaEF10', '_blank')}
               >
-                <Play className="h-6 w-6 mr-3" />
-                Listen to Music
+                <svg className="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                Subscribe @MiaEF10
               </Button>
               <Button 
                 variant="outline" 
                 size="lg" 
                 className="border-white text-white hover:bg-white hover:text-black font-bold px-12 py-4 text-lg rounded-none"
-                onClick={() => {
-                  const element = document.getElementById('gallery')
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                  }
-                }}
+                onClick={() => window.open('https://www.instagram.com/miaamusic_/', '_blank')}
               >
-                View Gallery
+                <svg className="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.919-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                Follow @miaamusic_
               </Button>
             </div>
           </div>
           
-          {/* Artist Image */}
+          {/* Video Slideshow */}
           <div className="relative">
-            <div className="relative">
-              {/* Main Image */}
-              <div 
-                className="aspect-[4/5] rounded-2xl bg-cover bg-center bg-no-repeat relative"
-                style={{
-                  backgroundImage: `url('https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80')`,
-                  backgroundPosition: 'center center'
-                }}
+            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
+              {/* Video slideshow */}
+              <video
+                className="w-full h-full object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-2xl"></div>
-              </div>
+                <source src="https://i.imgur.com/hzzt3ip.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
               
-              {/* Floating Frame */}
-              <div className="absolute inset-4 border-2 border-white/30 rounded-2xl"></div>
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-2xl"></div>
               
               {/* Achievement Badges */}
-              <div className="absolute -top-6 -left-6 glass-effect rounded-xl p-4">
+              <div className="absolute -top-6 -left-6 glass-effect rounded-xl p-4 z-10">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary">1st</div>
                   <div className="text-xs text-white/80">7th Grade</div>
@@ -87,7 +91,7 @@ export default function Hero() {
                 </div>
               </div>
               
-              <div className="absolute -bottom-6 -right-6 glass-effect rounded-xl p-4">
+              <div className="absolute -bottom-6 -right-6 glass-effect rounded-xl p-4 z-10">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-primary">6th</div>
                   <div className="text-xs text-white/80">Grade</div>
@@ -97,45 +101,6 @@ export default function Hero() {
             </div>
           </div>
         </div>
-      </div>
-      
-      {/* Navigation Arrows */}
-      <div className="absolute left-8 top-1/2 transform -translate-y-1/2 z-10">
-        <button 
-          className="w-12 h-12 glass-effect rounded-full flex items-center justify-center text-white hover:text-primary transition-colors"
-          onClick={() => {
-            const element = document.getElementById('about')
-            if (element) {
-              element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-            }
-          }}
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-      </div>
-      
-      <div className="absolute right-8 top-1/2 transform -translate-y-1/2 z-10">
-        <button 
-          className="w-12 h-12 glass-effect rounded-full flex items-center justify-center text-white hover:text-primary transition-colors"
-          onClick={() => {
-            const element = document.getElementById('about')
-            if (element) {
-              element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-            }
-          }}
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
-      
-      {/* Slider Indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-        <div className="w-3 h-3 bg-white rounded-full"></div>
-        <div className="w-3 h-3 bg-white/30 rounded-full"></div>
       </div>
     </section>
   )

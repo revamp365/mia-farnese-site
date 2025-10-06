@@ -24,6 +24,19 @@ Mia Farnese is a talented young artist who has been singing for several years an
 pnpm install
 pnpm run dev
 ```
+
+### 💬 Chat Integration (Optional)
+
+To enable live chat with Slack notifications:
+
+1. Create a Slack app in your workspace
+2. Add an incoming webhook to your app
+3. Copy the webhook URL
+4. Create a `.env` file in the root directory:
+```bash
+VITE_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
+```
+
 Open http://localhost:5173 to preview.
 
 ## 🌐 Deploy to Vercel

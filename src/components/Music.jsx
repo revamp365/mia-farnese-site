@@ -61,7 +61,11 @@ export default function Music() {
                 Follow Mia's musical journey and be the first to see new performances, 
                 covers, and original music as she continues to grow as an artist.
               </p>
-              <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white font-bold px-12 py-4 text-lg rounded-none">
+              <Button 
+                size="lg" 
+                className="bg-red-600 hover:bg-red-700 text-white font-bold px-12 py-4 text-lg rounded-none"
+                onClick={() => window.open('https://www.youtube.com/@MiaEF10', '_blank')}
+              >
                 <Youtube className="h-6 w-6 mr-3" />
                 Visit YouTube Channel
               </Button>
@@ -114,7 +118,11 @@ export default function Music() {
               Get behind-the-scenes content, practice sessions, and updates on Mia's musical journey. 
               See her progress as she prepares for upcoming performances.
             </p>
-            <Button size="lg" className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold px-12 py-4 text-lg rounded-none">
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold px-12 py-4 text-lg rounded-none"
+              onClick={() => window.open('https://www.instagram.com/miaamusic_/', '_blank')}
+            >
               <Headphones className="h-6 w-6 mr-3" />
               Follow @miaamusic_
             </Button>
