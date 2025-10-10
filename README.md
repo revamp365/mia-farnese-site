@@ -25,6 +25,28 @@ pnpm install
 pnpm run dev
 ```
 
+### 📧 Email Notifications Setup
+
+To enable email notifications for contact form and chat messages:
+
+1. **Sign up for EmailJS** at https://www.emailjs.com/
+2. **Create an Email Service** (Gmail, Outlook, etc.)
+3. **Create Email Templates**:
+   - Contact form template
+   - Chat message template
+4. **Get your credentials** from EmailJS dashboard
+5. **Create a `.env` file** in the root directory:
+```bash
+# EmailJS Configuration
+VITE_EMAILJS_SERVICE_ID=your_service_id
+VITE_EMAILJS_TEMPLATE_ID=your_contact_template_id
+VITE_EMAILJS_CHAT_TEMPLATE_ID=your_chat_template_id
+VITE_EMAILJS_USER_ID=your_user_id
+
+# Slack Webhook (Optional)
+VITE_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
+```
+
 ### 💬 Chat Integration (Optional)
 
 To enable live chat with Slack notifications:
@@ -32,10 +54,7 @@ To enable live chat with Slack notifications:
 1. Create a Slack app in your workspace
 2. Add an incoming webhook to your app
 3. Copy the webhook URL
-4. Create a `.env` file in the root directory:
-```bash
-VITE_SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
-```
+4. Add to your `.env` file (see above)
 
 Open http://localhost:5173 to preview.
 
@@ -47,7 +66,13 @@ Open http://localhost:5173 to preview.
 4. Framework preset → Vite
 5. Build command → `pnpm run build`
 6. Output directory → `dist`
-7. Click Deploy 🎉
+7. Add environment variables from your `.env` file to Vercel settings:
+   - `VITE_EMAILJS_SERVICE_ID`
+   - `VITE_EMAILJS_TEMPLATE_ID` 
+   - `VITE_EMAILJS_CHAT_TEMPLATE_ID`
+   - `VITE_EMAILJS_USER_ID`
+   - `VITE_SLACK_WEBHOOK_URL` (optional)
+8. Click Deploy 🎉
 
 ## 📱 Features
 
@@ -56,7 +81,10 @@ Open http://localhost:5173 to preview.
 - **Performance**: Optimized with Vite for fast loading
 - **SEO Ready**: Meta tags and structured content
 - **Social Integration**: YouTube and Instagram links
-- **Contact Form**: Ready for inquiries and bookings
+- **Contact Form**: Email notifications to drew@revamp365.net
+- **Live Chat**: Real-time chat with email notifications
+- **Email Notifications**: Automatic email alerts for all inquiries
+- **Slack Integration**: Optional Slack notifications for chat messages
 
 ## 🎨 Customization
 

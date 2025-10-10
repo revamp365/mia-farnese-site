@@ -1,13 +1,53 @@
+import { useState } from 'react'
 import { Mail, Phone, MapPin, Calendar, Music as MusicIcon, Send } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
+import emailjs from '@emailjs/browser'
 
 export default function Contact() {
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Handle form submission
-    alert('Thank you for your message! We\'ll get back to you soon.')
+    setIsSubmitting(true)
+
+    try {
+      // Send email notification using EmailJS SDK
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+          to_email: 'drew@revamp365.net'
+        },
+        import.meta.env.VITE_EMAILJS_USER_ID
+      )
+
+      alert('Thank you for your message! We\'ll get back to you soon.')
+      setFormData({ name: '', email: '', subject: '', message: '' })
+    } catch (error) {
+      console.error('Error sending email:', error)
+      alert('There was an error sending your message. Please try again or contact us directly.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -43,6 +83,9 @@ export default function Contact() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <Input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
                       placeholder="Your name"
                       className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
                       required
@@ -50,7 +93,10 @@ export default function Contact() {
                   </div>
                   <div>
                     <Input
+                      name="email"
                       type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       placeholder="Email address"
                       className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
                       required
@@ -59,6 +105,9 @@ export default function Contact() {
                 </div>
                 <div>
                   <Input
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
                     placeholder="Subject"
                     className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
                     required
@@ -66,6 +115,9 @@ export default function Contact() {
                 </div>
                 <div>
                   <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
                     placeholder="Tell us about your event or question..."
                     rows={6}
                     className="w-full px-3 py-2 bg-white/10 border border-white/30 text-white placeholder:text-white/70 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
@@ -74,10 +126,11 @@ export default function Contact() {
                 </div>
                 <Button
                   type="submit"
-                  className="w-full bg-primary hover:bg-primary/90 text-black font-bold py-3"
+                  disabled={isSubmitting}
+                  className="w-full bg-primary hover:bg-primary/90 text-black font-bold py-3 disabled:opacity-50"
                 >
                   <Send className="h-4 w-4 mr-2" />
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </Button>
               </form>
             </CardContent>

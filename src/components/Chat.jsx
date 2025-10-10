@@ -3,6 +3,7 @@ import { MessageCircle, X, Send, User, Mail, Phone } from 'lucide-react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import emailjs from '@emailjs/browser'
 
 export default function Chat() {
   const [isOpen, setIsOpen] = useState(false)
@@ -78,6 +79,27 @@ export default function Chat() {
     }
   }
 
+  const sendEmailNotification = async (message, visitorData, isNewChat = false) => {
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_CHAT_TEMPLATE_ID,
+        {
+          from_name: visitorData.name || 'Anonymous',
+          from_email: visitorData.email || 'No email provided',
+          message: message,
+          phone: visitorData.phone || 'Not provided',
+          to_email: 'drew@revamp365.net',
+          chat_type: isNewChat ? 'New Chat Started' : 'Chat Message',
+          timestamp: new Date().toLocaleString()
+        },
+        import.meta.env.VITE_EMAILJS_USER_ID
+      )
+    } catch (error) {
+      console.error('Error sending email notification:', error)
+    }
+  }
+
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return
 
@@ -90,8 +112,11 @@ export default function Chat() {
 
     setMessages(prev => [...prev, userMessage])
     
-    // Send to Slack
-    await sendToSlack(newMessage, visitorInfo)
+    // Send to Slack and Email
+    await Promise.all([
+      sendToSlack(newMessage, visitorInfo),
+      sendEmailNotification(newMessage, visitorInfo, false)
+    ])
     
     // Auto-reply
     setTimeout(() => {
@@ -125,10 +150,13 @@ export default function Chat() {
     setIsOpen(false)
   }
 
-  const submitContactInfo = () => {
+  const submitContactInfo = async () => {
     setShowContactForm(false)
-    // Send initial greeting with contact info
-    sendToSlack(`New visitor started chat: ${visitorInfo.name} (${visitorInfo.email})`, visitorInfo)
+    // Send initial greeting with contact info to both Slack and Email
+    await Promise.all([
+      sendToSlack(`New visitor started chat: ${visitorInfo.name} (${visitorInfo.email})`, visitorInfo),
+      sendEmailNotification(`New visitor started chat: ${visitorInfo.name} (${visitorInfo.email})`, visitorInfo, true)
+    ])
   }
 
   return (
