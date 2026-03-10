@@ -165,7 +165,7 @@ export default function Chat() {
       {!isOpen && (
         <button
           onClick={openChat}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-primary hover:bg-primary/90 text-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
+          className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 w-14 h-14 bg-primary hover:bg-primary/90 text-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
         >
           <MessageCircle className="h-6 w-6" />
         </button>
@@ -173,7 +173,7 @@ export default function Chat() {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-96 h-[500px] glass-effect rounded-2xl shadow-2xl border border-white/20">
+        <div className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-1.5rem)] max-w-sm sm:max-w-none sm:w-96 h-[calc(100vh-5rem)] max-h-[500px] glass-effect rounded-2xl shadow-2xl border border-white/20">
           <Card className="h-full bg-transparent border-0">
             <CardHeader className="pb-3 bg-gradient-to-r from-primary/20 to-pink-500/20 rounded-t-2xl">
               <div className="flex items-center justify-between">

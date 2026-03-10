@@ -10,6 +10,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        serif: ["'Playfair Display'", "Georgia", "serif"],
+        sans: ["'Inter'", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -36,13 +40,10 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+        gold: {
+          DEFAULT: "#d4af37",
+          light: "#e8c84a",
+          dark: "#b8960c",
         },
       },
       borderRadius: {
@@ -59,10 +60,15 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% center" },
+          "100%": { backgroundPosition: "200% center" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        shimmer: "shimmer 3s linear infinite",
       },
     },
   },

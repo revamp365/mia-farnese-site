@@ -1,32 +1,30 @@
 import { useState } from 'react'
-import { Mail, Phone, MapPin, Calendar, Music as MusicIcon, Send } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
+import { motion } from 'framer-motion'
+import { MessageSquare, Youtube, Instagram, Send } from 'lucide-react'
 import emailjs from '@emailjs/browser'
+
+const inputClass =
+  'w-full px-4 py-3 bg-transparent border border-white/8 text-slate-100 placeholder:text-slate-600 text-sm font-mono focus:outline-none focus:border-fuchsia-500/50 transition-colors duration-300'
+
+const tags = ['Live_Showcase', 'Studio_Guest', 'Acoustic_Set', 'Artist_Collab']
 
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
+  const handleChange = (e) =>
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
-
     try {
-      // Send email notification using EmailJS SDK
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
@@ -35,192 +33,210 @@ export default function Contact() {
           from_email: formData.email,
           subject: formData.subject,
           message: formData.message,
-          to_email: 'drew@revamp365.net'
+          to_email: 'drew@revamp365.net',
         },
         import.meta.env.VITE_EMAILJS_USER_ID
       )
-
-      alert('Thank you for your message! We\'ll get back to you soon.')
+      setSubmitted(true)
       setFormData({ name: '', email: '', subject: '', message: '' })
-    } catch (error) {
-      console.error('Error sending email:', error)
-      alert('There was an error sending your message. Please try again or contact us directly.')
+    } catch (err) {
+      console.error('Email error:', err)
+      alert('There was an error sending your message. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <section id="contact" className="py-24 bg-gradient-to-b from-black to-gray-900 relative">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}></div>
-      </div>
+    <section id="contact" className="py-16 md:py-32 px-6 md:px-16 lg:px-24 bg-slate-950 relative overflow-hidden">
+      {/* Top accent line */}
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-fuchsia-500/40 to-transparent" />
 
-      <div className="relative z-10 container mx-auto px-6">
-        <div className="text-center mb-20">
-          <h2 className="text-5xl lg:text-6xl font-bold mb-8 text-white">
-            <span className="gradient-text">Get In Touch</span>
-          </h2>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto">
-            Ready to book Mia for your event or have questions about her music? We'd love to hear from you!
-          </p>
+      {/* Bloom */}
+      <div
+        className="absolute top-0 right-0 w-80 h-80 pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(217,70,239,0.04) 0%, transparent 70%)',
+        }}
+      />
+
+      <div className="max-w-5xl mx-auto">
+        {/* Header */}
+        <div className="mb-10 md:mb-20 text-center">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center justify-center gap-4 mb-3"
+          >
+            <div className="w-8 h-[2px] bg-fuchsia-500" />
+            <span className="text-fuchsia-500 font-mono tracking-widest text-[10px] uppercase">
+              Secure_Line
+            </span>
+            <div className="w-8 h-[2px] bg-fuchsia-500" />
+          </motion.div>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-3xl sm:text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter"
+          >
+            Establish Contact
+          </motion.h2>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* Contact Form */}
-          <Card className="glass-effect border-primary/30">
-            <CardHeader>
-              <CardTitle className="text-2xl text-white flex items-center">
-                <Mail className="h-6 w-6 mr-3 text-primary" />
-                Send us a message
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <Input
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="Your name"
-                      className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Input
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="Email address"
-                      className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
-                      required
-                    />
-                  </div>
+        <div className="grid md:grid-cols-2 gap-8 md:gap-14">
+          {/* Form */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="p-5 sm:p-7 md:p-10 border border-white/8 bg-white/[0.01] relative"
+          >
+            <div className="absolute top-0 right-0 p-3 font-mono text-[8px] text-white/15 uppercase tracking-widest">
+              MF_COMMS_v1
+            </div>
+
+            <h3 className="text-lg md:text-xl font-black italic uppercase tracking-tighter text-white mb-6 md:mb-8 flex items-center gap-3">
+              <MessageSquare size={18} className="text-fuchsia-500 shrink-0" />
+              Send a Message
+            </h3>
+
+            {submitted ? (
+              <div className="py-10 text-center">
+                <div className="w-10 h-10 border border-fuchsia-500/40 flex items-center justify-center mx-auto mb-5">
+                  <Send size={16} className="text-fuchsia-400" />
                 </div>
-                <div>
-                  <Input
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    placeholder="Subject"
-                    className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
+                <p className="text-white font-mono text-sm uppercase tracking-widest mb-2">
+                  Transmission Received
+                </p>
+                <p className="text-slate-500 text-xs font-mono">
+                  We will respond shortly.
+                </p>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="mt-6 text-[10px] uppercase tracking-widest text-fuchsia-500/50 hover:text-fuchsia-400 transition-colors font-mono"
+                >
+                  Send another
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                  <input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="// your_name"
+                    className={inputClass}
+                    required
+                  />
+                  <input
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="// email_address"
+                    className={inputClass}
                     required
                   />
                 </div>
-                <div>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder="Tell us about your event or question..."
-                    rows={6}
-                    className="w-full px-3 py-2 bg-white/10 border border-white/30 text-white placeholder:text-white/70 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
-                    required
-                  />
-                </div>
-                <Button
+                <input
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  placeholder="// subject_line"
+                  className={inputClass}
+                  required
+                />
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="// your_message..."
+                  rows={5}
+                  className={`${inputClass} resize-none`}
+                  required
+                />
+                <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-primary hover:bg-primary/90 text-black font-bold py-3 disabled:opacity-50"
+                  className="group relative w-full px-6 py-4 bg-fuchsia-600 hover:bg-fuchsia-500 transition-colors overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Send className="h-4 w-4 mr-2" />
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </Button>
+                  <span className="absolute inset-0 bg-white/15 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                  <span className="relative flex items-center justify-center gap-3 font-bold uppercase tracking-[0.15em] text-[11px] text-white">
+                    <Send size={13} />
+                    {isSubmitting ? 'Transmitting...' : 'Send Message'}
+                  </span>
+                </button>
               </form>
-            </CardContent>
-          </Card>
+            )}
+          </motion.div>
 
-          {/* Contact Info & Booking */}
-          <div className="space-y-8">
-            {/* Contact Information */}
-            <Card className="glass-effect border-white/20">
-              <CardHeader>
-                <CardTitle className="text-xl text-white">Contact Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
-                    <Mail className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-white/80 text-sm">Email</p>
-                    <p className="text-white font-medium">mia@mia-farnese.com</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
-                    <Phone className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-white/80 text-sm">Phone</p>
-                    <p className="text-white font-medium">Available upon request</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-primary/20 rounded-full flex items-center justify-center">
-                    <MapPin className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-white/80 text-sm">Location</p>
-                    <p className="text-white font-medium">Available for events nationwide</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Booking Information */}
-            <Card className="glass-effect border-primary/30 bg-gradient-to-r from-primary/10 to-pink-500/10">
-              <CardHeader>
-                <CardTitle className="text-xl text-white flex items-center">
-                  <Calendar className="h-6 w-6 mr-3 text-primary" />
-                  Booking Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <MusicIcon className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                    <div>
-                      <h4 className="text-white font-semibold mb-2">Performance Types</h4>
-                      <ul className="text-white/80 text-sm space-y-1">
-                        <li>• School talent shows and competitions</li>
-                        <li>• Community events and festivals</li>
-                        <li>• Private parties and celebrations</li>
-                        <li>• Fundraising events and galas</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3">
-                    <Calendar className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
-                    <div>
-                      <h4 className="text-white font-semibold mb-2">Availability</h4>
-                      <p className="text-white/80 text-sm">
-                        Mia is available for bookings on weekends and during school breaks. 
-                        Please contact us at least 2 weeks in advance for event planning.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <Button 
-                  className="w-full mt-6 bg-primary hover:bg-primary/90 text-black font-bold"
-                  onClick={() => {
-                    const element = document.getElementById('contact')
-                    const form = element?.querySelector('form')
-                    form?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-                  }}
+          {/* Info panel */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col justify-between gap-8 md:gap-0 md:space-y-10"
+          >
+            {/* Social links */}
+            <div>
+              <h4 className="text-white/40 font-mono text-[10px] uppercase tracking-[0.2em] mb-4">
+                Signal_Grid
+              </h4>
+              <div className="flex gap-6">
+                <button
+                  onClick={() => window.open('https://www.youtube.com/@MiaEF10', '_blank')}
+                  className="flex items-center gap-2 group/link"
                 >
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Request Booking
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+                  <Youtube size={18} className="text-white group-hover/link:text-fuchsia-500 transition-colors" />
+                  <span className="text-[10px] font-mono tracking-widest text-white/50 group-hover/link:text-fuchsia-500 transition-colors">
+                    YOUTUBE
+                  </span>
+                </button>
+                <button
+                  onClick={() => window.open('https://www.instagram.com/miaamusic_/', '_blank')}
+                  className="flex items-center gap-2 group/link"
+                >
+                  <Instagram size={18} className="text-white group-hover/link:text-fuchsia-500 transition-colors" />
+                  <span className="text-[10px] font-mono tracking-widest text-white/50 group-hover/link:text-fuchsia-500 transition-colors">
+                    INSTAGRAM
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Availability */}
+            <div>
+              <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-3 md:mb-4">
+                Availability_Matrix
+              </h4>
+              <p className="text-slate-400 text-sm md:text-base leading-relaxed mb-6 md:mb-8">
+                Currently accepting inquiries for live performances, school events, and creative
+                collaborations. Please reach out at least 2 weeks in advance.
+              </p>
+
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1.5 bg-fuchsia-500/5 border border-fuchsia-500/20 text-fuchsia-500 text-[9px] uppercase font-mono tracking-tight"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Status */}
+            <div className="pt-5 border-t border-white/5">
+              <p className="text-[10px] font-mono text-slate-600 uppercase tracking-widest">
+                Current Status:{' '}
+                <span className="text-emerald-500 animate-pulse">Online & Ready</span>
+              </p>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
