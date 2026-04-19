@@ -20,7 +20,7 @@ function SectionHeader({ title, subtitle }) {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-3xl sm:text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter"
+        className="text-3xl sm:text-4xl md:text-6xl font-serif font-bold text-white italic uppercase tracking-tighter"
       >
         {title}
       </motion.h2>
@@ -92,14 +92,14 @@ export default function About() {
           <div className="absolute -top-10 -right-10 w-48 h-48 pointer-events-none hidden md:block"
             style={{ background: 'radial-gradient(circle, rgba(217,70,239,0.06) 0%, transparent 70%)' }} />
 
-          <div className="absolute bottom-4 left-4 z-20 font-mono text-[8px] bg-slate-950/85 backdrop-blur-sm px-2.5 py-1.5 border border-fuchsia-500/35 text-fuchsia-400 uppercase tracking-widest">
-            IMG_REF: TALENT_CHAMP_2024.LOG
+          <div className="absolute bottom-4 left-4 z-20 text-[10px] bg-slate-950/90 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/10 text-slate-300 max-w-[12rem] leading-snug">
+            Talent show — 7th grade, 1st place
           </div>
         </motion.div>
 
         {/* Text column */}
         <div className="space-y-6 md:space-y-10">
-          <SectionHeader title="The Origin" subtitle="System_Profile" />
+          <SectionHeader title="The story" subtitle="About Mia" />
 
           <p className="text-lg md:text-xl lg:text-2xl text-slate-300 leading-relaxed font-light italic">
             "At 13, I don't just want to be heard — I want to be felt."
@@ -158,7 +158,7 @@ export default function About() {
         <div className="flex items-center gap-4 mb-8 md:mb-10">
           <div className="w-8 h-[2px] bg-fuchsia-500 shrink-0" />
           <span className="text-fuchsia-500 font-mono tracking-widest text-[10px] uppercase">
-            Journey_Log
+            Journey
           </span>
         </div>
 

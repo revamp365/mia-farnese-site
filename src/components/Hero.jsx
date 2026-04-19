@@ -66,11 +66,11 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.6 }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 mb-6 md:mb-8 border border-fuchsia-500/30 bg-fuchsia-500/8 text-fuchsia-400 font-mono text-[9px] md:text-[10px] tracking-widest uppercase"
-          style={{ boxShadow: '0 0 25px rgba(217,70,239,0.1)' }}
+          className="inline-flex items-center gap-2 px-4 py-2 mb-6 md:mb-8 rounded-full border border-fuchsia-500/25 bg-fuchsia-500/10 text-fuchsia-300 font-mono text-[9px] md:text-[10px] tracking-widest uppercase"
+          style={{ boxShadow: '0 0 25px rgba(217,70,239,0.08)' }}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-500 animate-pulse shrink-0" />
-          Active Transmission: Acoustic Artist
+          <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-500 animate-pulse shrink-0" aria-hidden />
+          Singer & guitarist · acoustic artist
         </motion.div>
 
         {/* Name */}
@@ -78,7 +78,7 @@ export default function Hero() {
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1.8, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="text-[3rem] sm:text-[4.5rem] md:text-[7.5rem] lg:text-[11rem] font-black italic uppercase leading-[0.85] tracking-tighter text-white mb-5 md:mb-8"
+          className="text-[3rem] sm:text-[4.5rem] md:text-[7.5rem] lg:text-[11rem] font-serif font-bold italic uppercase leading-[0.88] tracking-tight text-white mb-5 md:mb-8"
         >
           Mia
           <br />
@@ -108,21 +108,24 @@ export default function Hero() {
           className="flex flex-col sm:flex-row gap-3 items-start sm:items-center"
         >
           <button
+            type="button"
             onClick={() =>
               document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
             }
-            className="group relative px-8 py-4 bg-fuchsia-600 hover:bg-fuchsia-500 transition-colors overflow-hidden w-full sm:w-auto"
+            className="group relative px-8 py-4 rounded-xl bg-fuchsia-600 hover:bg-fuchsia-500 transition-colors overflow-hidden w-full sm:w-auto shadow-lg shadow-fuchsia-950/40"
           >
             <span className="absolute inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-            <span className="relative flex items-center justify-center sm:justify-start gap-3 font-bold uppercase tracking-[0.2em] text-[11px] text-white">
-              Initiate Booking <ArrowRight size={13} />
+            <span className="relative flex items-center justify-center sm:justify-start gap-3 font-bold uppercase tracking-[0.18em] text-[11px] text-white">
+              Book a performance <ArrowRight size={13} aria-hidden />
             </span>
           </button>
 
           <div className="flex gap-3">
             <button
+              type="button"
               onClick={() => window.open('https://www.youtube.com/@MiaEF10', '_blank')}
-              className="p-4 bg-white/5 hover:bg-fuchsia-500/15 border border-white/10 hover:border-fuchsia-500/50 transition-all group"
+              className="p-4 rounded-xl bg-white/5 hover:bg-fuchsia-500/15 border border-white/10 hover:border-fuchsia-500/50 transition-all group"
+              aria-label="Open YouTube channel"
             >
               <Youtube
                 size={17}
@@ -130,8 +133,10 @@ export default function Hero() {
               />
             </button>
             <button
+              type="button"
               onClick={() => window.open('https://www.instagram.com/miaamusic_/', '_blank')}
-              className="p-4 bg-white/5 hover:bg-fuchsia-500/15 border border-white/10 hover:border-fuchsia-500/50 transition-all group"
+              className="p-4 rounded-xl bg-white/5 hover:bg-fuchsia-500/15 border border-white/10 hover:border-fuchsia-500/50 transition-all group"
+              aria-label="Open Instagram profile"
             >
               <Instagram
                 size={17}
@@ -142,16 +147,19 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Data overlay — desktop only */}
-      <div className="absolute bottom-10 right-8 text-right font-mono text-[9px] opacity-20 space-y-1.5 hidden lg:block uppercase tracking-widest">
-        <p>STRUM_FREQ: 440HZ_CALIBRATED</p>
-        <p>VOCAL_RES: OPTIMAL</p>
-        <p>SIGNAL: STRONG</p>
-        <div className="flex gap-[3px] justify-end h-4 mt-2 items-end">
+      {/* Decorative level meters — subtle motion, non-essential */}
+      <div
+        className="absolute bottom-10 right-8 hidden lg:flex flex-col items-end gap-2"
+        aria-hidden
+      >
+        <p className="text-slate-500 font-mono text-[9px] uppercase tracking-widest">
+          Live energy
+        </p>
+        <div className="flex gap-[3px] h-5 items-end opacity-60">
           {[...Array(16)].map((_, i) => (
             <motion.div
               key={i}
-              className="w-[2px] bg-fuchsia-500"
+              className="w-[2px] rounded-full bg-fuchsia-500/80"
               animate={{ height: [4, 14, 7, 18, 4] }}
               transition={{
                 duration: 1.4 + (i % 4) * 0.3,

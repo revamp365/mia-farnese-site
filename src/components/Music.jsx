@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Cpu, Play, Youtube, Instagram } from 'lucide-react'
+import { Play, Youtube, Instagram } from 'lucide-react'
 
 function SectionHeader({ title, subtitle }) {
   return (
@@ -19,7 +19,7 @@ function SectionHeader({ title, subtitle }) {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-3xl sm:text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter"
+        className="text-3xl sm:text-4xl md:text-6xl font-serif font-bold text-white italic uppercase tracking-tighter"
       >
         {title}
       </motion.h2>
@@ -63,7 +63,7 @@ export default function Music() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 h-full w-px bg-white/[0.025] hidden lg:block" />
 
       <div className="relative z-10 max-w-7xl mx-auto">
-        <SectionHeader title="Performance Feed" subtitle="Live_Transmissions" />
+        <SectionHeader title="Performances" subtitle="Highlights" />
 
         {/* Card grid — 1 col mobile, 3 col md+ */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 md:mb-20">
@@ -75,43 +75,41 @@ export default function Music() {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
               whileHover={{ y: -6 }}
-              className="group relative h-[340px] sm:h-[420px] md:h-[560px] overflow-hidden bg-slate-900 border border-white/5 cursor-default"
+              className="group relative h-[340px] sm:h-[420px] md:h-[560px] overflow-hidden rounded-2xl bg-slate-900 border border-white/8 cursor-default shadow-xl shadow-black/20"
             >
               <img
                 src={item.img}
                 alt={item.title}
-                className="absolute inset-0 w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-60 transition-all duration-700"
+                className="absolute inset-0 w-full h-full object-cover grayscale-[0.35] opacity-55 group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-75 transition-all duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/25 to-transparent" />
 
               <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-9 z-10">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="px-2 py-0.5 bg-fuchsia-600/20 border border-fuchsia-500/40 text-fuchsia-400 text-[9px] font-mono">
-                    {item.id}
+                  <span className="px-2.5 py-1 rounded-md bg-fuchsia-600/25 border border-fuchsia-500/35 text-fuchsia-200 text-[9px] font-mono uppercase tracking-wide">
+                    {item.date}
                   </span>
-                  <span className="text-white/35 font-mono text-[9px] uppercase tracking-tight">
-                    Verified_Entry
+                  <span className="text-white/45 font-mono text-[9px] uppercase tracking-tight">
+                    {item.type}
                   </span>
                 </div>
 
-                <h3 className="text-2xl md:text-3xl font-black italic uppercase text-white mb-1 leading-none group-hover:text-fuchsia-400 transition-colors duration-300">
+                <h3 className="text-2xl md:text-3xl font-serif font-bold italic uppercase text-white mb-1 leading-none group-hover:text-fuchsia-300 transition-colors duration-300">
                   {item.title}
                 </h3>
-                <p className="text-slate-500 text-xs md:text-sm mb-3 md:mb-4">{item.subtitle}</p>
+                <p className="text-slate-400 text-xs md:text-sm mb-3 md:mb-4">{item.subtitle}</p>
 
                 <div className="flex justify-between items-center">
-                  <p className="text-slate-600 text-[9px] uppercase tracking-widest font-mono">
-                    {item.type} // {item.date}
+                  <p className="text-slate-500 text-[10px] uppercase tracking-widest font-mono">
+                    Featured moment
                   </p>
-                  <div className="p-2 md:p-2.5 bg-fuchsia-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div
+                    className="p-2.5 rounded-lg bg-fuchsia-600/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    aria-hidden
+                  >
                     <Play size={12} fill="white" className="text-white" />
                   </div>
                 </div>
-              </div>
-
-              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col items-end gap-1">
-                <Cpu size={13} className="text-fuchsia-500" />
-                <div className="w-px h-8 bg-fuchsia-500/30" />
               </div>
             </motion.div>
           ))}
@@ -124,7 +122,7 @@ export default function Music() {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="group p-6 md:p-8 border border-white/5 hover:border-fuchsia-500/25 transition-all bg-white/[0.01] relative overflow-hidden"
+            className="group p-6 md:p-8 rounded-2xl border border-white/8 hover:border-fuchsia-500/25 transition-all bg-white/[0.02] relative overflow-hidden"
           >
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -136,9 +134,9 @@ export default function Music() {
               </div>
               <div>
                 <p className="text-slate-500 font-mono text-[9px] uppercase tracking-[0.2em] mb-1">
-                  Channel_Stream
+                  Channel
                 </p>
-                <h3 className="font-black italic uppercase tracking-tighter text-white text-lg md:text-xl mb-2">
+                <h3 className="font-serif font-bold italic uppercase tracking-tighter text-white text-lg md:text-xl mb-2">
                   YouTube
                 </h3>
                 <p className="text-slate-500 text-sm leading-relaxed mb-4 md:mb-5">
@@ -161,7 +159,7 @@ export default function Music() {
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="group p-6 md:p-8 border border-white/5 hover:border-fuchsia-500/25 transition-all bg-white/[0.01] relative overflow-hidden"
+            className="group p-6 md:p-8 rounded-2xl border border-white/8 hover:border-fuchsia-500/25 transition-all bg-white/[0.02] relative overflow-hidden"
           >
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
@@ -173,9 +171,9 @@ export default function Music() {
               </div>
               <div>
                 <p className="text-slate-500 font-mono text-[9px] uppercase tracking-[0.2em] mb-1">
-                  Social_Feed
+                  Social
                 </p>
-                <h3 className="font-black italic uppercase tracking-tighter text-white text-lg md:text-xl mb-2">
+                <h3 className="font-serif font-bold italic uppercase tracking-tighter text-white text-lg md:text-xl mb-2">
                   Instagram
                 </h3>
                 <p className="text-slate-500 text-sm leading-relaxed mb-4 md:mb-5">
