@@ -23,7 +23,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-14 mb-10 md:mb-20">
           {/* Brand — full width on mobile */}
           <div className="col-span-2 md:col-span-1">
-            <div className="text-2xl md:text-3xl font-black italic tracking-tighter text-white mb-3 md:mb-4">
+            <div className="text-2xl md:text-3xl font-serif font-bold italic tracking-tighter text-white mb-3 md:mb-4">
               MF<span className="text-fuchsia-500">.</span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed mb-5 max-w-xs">
@@ -33,14 +33,14 @@ export default function Footer() {
             <div className="flex gap-3">
               <button
                 onClick={() => window.open('https://www.youtube.com/@MiaEF10', '_blank')}
-                className="w-9 h-9 flex items-center justify-center border border-white/8 text-white/35 hover:border-red-500/50 hover:text-red-400 transition-all duration-300"
+                className="w-9 h-9 rounded-lg flex items-center justify-center border border-white/10 text-white/40 hover:border-red-500/50 hover:text-red-400 transition-all duration-300"
                 aria-label="YouTube"
               >
                 <Youtube size={14} />
               </button>
               <button
                 onClick={() => window.open('https://www.instagram.com/miaamusic_/', '_blank')}
-                className="w-9 h-9 flex items-center justify-center border border-white/8 text-white/35 hover:border-fuchsia-500/50 hover:text-fuchsia-400 transition-all duration-300"
+                className="w-9 h-9 rounded-lg flex items-center justify-center border border-white/10 text-white/40 hover:border-fuchsia-500/50 hover:text-fuchsia-400 transition-all duration-300"
                 aria-label="Instagram"
               >
                 <Instagram size={14} />
@@ -86,17 +86,16 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 md:pt-10 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 opacity-50">
-          <div className="text-2xl md:text-3xl font-black italic tracking-tighter text-white">
+        <div className="pt-8 md:pt-10 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 text-slate-500">
+          <div className="text-2xl md:text-3xl font-serif font-bold italic tracking-tighter text-white/80">
             MF<span className="text-fuchsia-500">.</span>
           </div>
-          <p className="text-[9px] font-mono tracking-[0.2em] uppercase text-slate-600 text-center">
-            &copy; {currentYear} Mia Farnese // All Rights Reserved
+          <p className="text-[10px] font-mono tracking-[0.15em] uppercase text-slate-600 text-center">
+            &copy; {currentYear} Mia Farnese · All rights reserved
           </p>
-          <div className="flex items-center gap-2 text-[9px] font-mono uppercase tracking-widest text-fuchsia-500">
-            <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-500 animate-ping" />
-            Pulse: Steady
-          </div>
+          <p className="text-[10px] font-mono uppercase tracking-widest text-slate-600">
+            Made with music
+          </p>
         </div>
       </div>
 

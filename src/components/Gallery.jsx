@@ -18,7 +18,7 @@ function SectionHeader({ title, subtitle }) {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-3xl sm:text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter"
+        className="text-3xl sm:text-4xl md:text-6xl font-serif font-bold text-white italic uppercase tracking-tighter"
       >
         {title}
       </motion.h2>
@@ -82,7 +82,7 @@ export default function Gallery() {
   return (
     <section id="gallery" className="py-16 md:py-32 px-6 md:px-16 lg:px-24 bg-slate-950 relative">
       <div className="max-w-7xl mx-auto">
-        <SectionHeader title="Media Archive" subtitle="Visual_Feed" />
+        <SectionHeader title="Gallery" subtitle="Photos & moments" />
 
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 mb-8 md:mb-14">
           {photos.map((photo, i) => (
@@ -92,7 +92,7 @@ export default function Gallery() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.07, duration: 0.7 }}
-              className={`group relative overflow-hidden bg-slate-900 border border-white/5 hover:border-fuchsia-500/25 transition-all duration-500 cursor-default ${
+              className={`group relative overflow-hidden rounded-xl bg-slate-900 border border-white/8 hover:border-fuchsia-500/30 transition-all duration-500 cursor-default shadow-lg shadow-black/15 ${
                 photo.tall ? 'row-span-2' : ''
               }`}
             >
@@ -111,18 +111,17 @@ export default function Gallery() {
                 <div className="absolute top-0 left-0 right-0 h-px bg-fuchsia-500/50" />
               )}
 
-              {/* Info — always visible on mobile, hover on desktop */}
-              <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-5 md:translate-y-2 md:opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                <p className="text-fuchsia-400 text-[8px] sm:text-[9px] uppercase tracking-[0.15em] font-mono mb-0.5">
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/85 to-transparent pt-12 pb-3 px-3 sm:pb-4 sm:px-4 md:px-5">
+                <p className="text-fuchsia-300/95 text-[8px] sm:text-[9px] uppercase tracking-[0.15em] font-mono mb-0.5">
                   {photo.category}
                 </p>
-                <h3 className="font-black italic uppercase tracking-tighter text-white text-sm sm:text-base leading-tight">
+                <h3 className="font-serif font-bold italic uppercase tracking-tighter text-white text-sm sm:text-base leading-tight">
                   {photo.title}
                 </h3>
               </div>
 
               {photo.highlight && (
-                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[8px] uppercase tracking-widest text-black bg-fuchsia-500 px-1.5 py-0.5 font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute top-2 right-2 sm:top-4 sm:right-4 text-[8px] uppercase tracking-widest text-white bg-fuchsia-600/95 backdrop-blur-sm px-2 py-1 rounded-md font-semibold shadow-md">
                   Featured
                 </div>
               )}
@@ -135,26 +134,26 @@ export default function Gallery() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 border border-white/5 p-5 sm:p-6 md:p-8"
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 rounded-2xl border border-white/8 bg-white/[0.02] p-5 sm:p-6 md:p-8"
         >
           <div>
-            <p className="text-slate-600 text-[10px] uppercase tracking-widest font-mono mb-1">
-              More_Content
+            <p className="text-slate-500 text-[10px] uppercase tracking-widest font-mono mb-1">
+              Stay connected
             </p>
-            <h3 className="font-black italic uppercase tracking-tighter text-white text-lg sm:text-xl">
-              Follow for live updates
+            <h3 className="font-serif font-bold italic uppercase tracking-tighter text-white text-lg sm:text-xl">
+              Follow for updates
             </h3>
           </div>
           <div className="flex gap-3 shrink-0 w-full sm:w-auto">
             <button
               onClick={() => window.open('https://www.youtube.com/@MiaEF10', '_blank')}
-              className="flex-1 sm:flex-none text-[10px] uppercase tracking-widest font-mono px-5 py-3 bg-red-600/10 border border-red-600/25 text-red-400 hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300 text-center"
+              className="flex-1 sm:flex-none text-[10px] uppercase tracking-widest font-mono px-5 py-3 rounded-xl bg-red-600/10 border border-red-600/25 text-red-400 hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300 text-center"
             >
               YouTube
             </button>
             <button
               onClick={() => window.open('https://www.instagram.com/miaamusic_/', '_blank')}
-              className="flex-1 sm:flex-none text-[10px] uppercase tracking-widest font-mono px-5 py-3 bg-pink-600/10 border border-pink-600/25 text-pink-400 hover:bg-fuchsia-500 hover:text-white hover:border-fuchsia-500 transition-all duration-300 text-center"
+              className="flex-1 sm:flex-none text-[10px] uppercase tracking-widest font-mono px-5 py-3 rounded-xl bg-pink-600/10 border border-pink-600/25 text-pink-400 hover:bg-fuchsia-500 hover:text-white hover:border-fuchsia-500 transition-all duration-300 text-center"
             >
               Instagram
             </button>

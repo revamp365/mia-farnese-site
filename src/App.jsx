@@ -10,14 +10,6 @@ import Footer from './components/Footer'
 import Chat from './components/Chat'
 import EmailTest from './components/EmailTest'
 
-const ScanningLine = () => (
-  <motion.div
-    className="fixed top-0 left-0 w-full h-[1px] bg-fuchsia-500/30 z-50 pointer-events-none"
-    animate={{ top: ['0%', '100%', '0%'] }}
-    transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-  />
-)
-
 const Preloader = ({ onComplete }) => {
   const [percent, setPercent] = useState(0)
 
@@ -26,12 +18,12 @@ const Preloader = ({ onComplete }) => {
       setPercent((prev) => {
         if (prev >= 100) {
           clearInterval(timer)
-          setTimeout(onComplete, 700)
+          setTimeout(onComplete, 400)
           return 100
         }
-        return prev + 2
+        return prev + 4
       })
-    }, 22)
+    }, 16)
     return () => clearInterval(timer)
   }, [onComplete])
 
@@ -45,8 +37,8 @@ const Preloader = ({ onComplete }) => {
         <p className="text-fuchsia-500 font-mono text-[11px] tracking-[0.4em] uppercase mb-2">
           Mia Farnese
         </p>
-        <p className="text-white/20 font-mono text-[9px] tracking-[0.25em]">
-          MF_AUDIO_PROTOCOL_v2.0
+        <p className="text-white/35 font-mono text-[9px] tracking-[0.25em]">
+          Singer & guitarist
         </p>
       </div>
 
@@ -62,14 +54,10 @@ const Preloader = ({ onComplete }) => {
 
       <span className="text-white font-mono text-3xl font-bold tabular-nums">{percent}%</span>
 
-      <div className="absolute bottom-10 left-10 opacity-30 hidden md:block">
-        <div className="text-fuchsia-400 font-mono text-[9px] space-y-1.5 uppercase tracking-widest">
-          <p>{'>'} MIA_FARNESE_PROTOCOL_v2.0</p>
-          <p>{'>'} CORE_AUDIO_SYNC: ACTIVE</p>
-          <p>{'>'} VOCAL_RESONANCE: OPTIMIZED</p>
-          <p>{'>'} GUITAR_STRATA: CALIBRATED</p>
-          <p>{'>'} BOOT_SEQUENCE: COMPLETE</p>
-        </div>
+      <div className="absolute bottom-10 left-10 opacity-40 hidden md:block max-w-[14rem]">
+        <p className="text-slate-400 text-xs leading-relaxed">
+          Welcome — scroll to explore performances, photos, and how to book Mia.
+        </p>
       </div>
 
       <motion.div
@@ -112,14 +100,18 @@ export default function App() {
 
   return (
     <div className="bg-slate-950 text-slate-100 min-h-screen overflow-x-hidden">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-lg focus:bg-fuchsia-600 focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+      >
+        Skip to main content
+      </a>
       <AnimatePresence>
         {loading && <Preloader key="loader" onComplete={() => setLoading(false)} />}
       </AnimatePresence>
 
-      {!loading && <ScanningLine />}
-
       <Header />
-      <main>
+      <main id="main-content">
         <Hero />
         <About />
         <Music />

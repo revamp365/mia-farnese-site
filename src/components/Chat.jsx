@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, User, Mail, Phone } from 'lucide-react'
+import { MessageCircle, X, Send } from 'lucide-react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
@@ -132,7 +132,7 @@ export default function Chat() {
     setNewMessage('')
   }
 
-  const handleKeyPress = (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSendMessage()
@@ -164,28 +164,36 @@ export default function Chat() {
       {/* Chat Toggle Button */}
       {!isOpen && (
         <button
+          type="button"
           onClick={openChat}
-          className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 w-14 h-14 bg-primary hover:bg-primary/90 text-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
+          className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 w-14 h-14 bg-fuchsia-600 hover:bg-fuchsia-500 text-white rounded-full flex items-center justify-center shadow-xl shadow-fuchsia-950/40 ring-2 ring-white/10 hover:scale-105 transition-all duration-300"
+          aria-label="Open chat with Mia’s team"
         >
-          <MessageCircle className="h-6 w-6" />
+          <MessageCircle className="h-6 w-6" aria-hidden />
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-1.5rem)] max-w-sm sm:max-w-none sm:w-96 h-[calc(100vh-5rem)] max-h-[500px] glass-effect rounded-2xl shadow-2xl border border-white/20">
+        <div
+          className="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-1.5rem)] max-w-sm sm:max-w-none sm:w-96 h-[calc(100vh-5rem)] max-h-[500px] glass-effect rounded-2xl shadow-2xl border border-white/15"
+          role="dialog"
+          aria-label="Chat with Mia’s team"
+        >
           <Card className="h-full bg-transparent border-0">
-            <CardHeader className="pb-3 bg-gradient-to-r from-primary/20 to-pink-500/20 rounded-t-2xl">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-white text-lg font-bold flex items-center">
-                  <MessageCircle className="h-5 w-5 mr-2" />
-                  Chat with Mia's Team
+            <CardHeader className="pb-3 bg-gradient-to-r from-fuchsia-600/25 to-pink-600/20 rounded-t-2xl border-b border-white/10">
+              <div className="flex items-center justify-between gap-2">
+                <CardTitle className="text-white text-base font-semibold flex items-center font-sans">
+                  <MessageCircle className="h-5 w-5 mr-2 shrink-0 text-fuchsia-200" aria-hidden />
+                  Chat with Mia&apos;s team
                 </CardTitle>
                 <Button
+                  type="button"
                   variant="ghost"
                   size="sm"
                   onClick={closeChat}
-                  className="text-white hover:bg-white/20 p-1 h-8 w-8"
+                  className="text-white hover:bg-white/15 rounded-lg p-1 h-8 w-8 shrink-0"
+                  aria-label="Close chat"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -266,14 +274,17 @@ export default function Chat() {
                   <Input
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyDown}
                     placeholder="Type your message..."
-                    className="flex-1 bg-white/20 border-white/30 text-white placeholder:text-white/70"
+                    className="flex-1 bg-white/15 border-white/25 text-white placeholder:text-white/55 rounded-lg"
+                    aria-label="Message text"
                   />
                   <Button
+                    type="button"
                     onClick={handleSendMessage}
                     disabled={!newMessage.trim()}
-                    className="bg-primary hover:bg-primary/90 text-black px-4"
+                    className="bg-fuchsia-600 hover:bg-fuchsia-500 text-white px-4 rounded-lg"
+                    aria-label="Send message"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
