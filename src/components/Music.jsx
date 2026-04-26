@@ -1,5 +1,195 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Cpu, Play, Youtube, Instagram } from 'lucide-react'
+import { Cpu, Play, Youtube, Instagram, X } from 'lucide-react'
+
+/** Album: https://imgur.com/a/znOrPok */
+const FIRST_PERFORMANCE_VIDEOS = [
+  {
+    id: '8XzPm5F',
+    label: 'Exes and Ohs',
+    src: 'https://i.imgur.com/8XzPm5F.mp4',
+  },
+  {
+    id: 'DHpo74X',
+    label: 'You Belong With Me',
+    src: 'https://i.imgur.com/DHpo74X.mp4',
+  },
+  {
+    id: 'nCVXjsm',
+    label: 'Traitor',
+    src: 'https://i.imgur.com/nCVXjsm.mp4',
+  },
+  {
+    id: 'gwYnkOu',
+    label: 'Wonderwall',
+    src: 'https://i.imgur.com/gwYnkOu.mp4',
+  },
+]
+
+/** Album: https://imgur.com/a/jIhyjf5 */
+const SECOND_PERFORMANCE_VIDEOS = [
+  {
+    id: '6mA7pnR',
+    label: 'Sunrise',
+    src: 'https://i.imgur.com/6mA7pnR.mp4',
+  },
+  {
+    id: '7k4qDk3',
+    label: 'Exes And Ohs',
+    src: 'https://i.imgur.com/7k4qDk3.mp4',
+  },
+]
+
+const GALLERY_CONFIG = {
+  first: {
+    videos: FIRST_PERFORMANCE_VIDEOS,
+    heading: 'first performance',
+    badge: 'First Performance',
+    blurb: 'Debut day archive — YouTube-style grid. Videos play only after click.',
+    albumUrl: 'https://imgur.com/a/znOrPok',
+    titleId: 'performance-gallery-first-title',
+  },
+  second: {
+    videos: SECOND_PERFORMANCE_VIDEOS,
+    heading: 'second preformance',
+    badge: 'Second preformance',
+    blurb: 'Second preformance archive — YouTube-style grid. Videos play only after click.',
+    albumUrl: 'https://imgur.com/a/jIhyjf5',
+    titleId: 'performance-gallery-second-title',
+  },
+}
+
+function PerformanceVideoModal({ open, onClose, heading, badge, blurb, albumUrl, videos, titleId }) {
+  const [playingId, setPlayingId] = useState(null)
+
+  useEffect(() => {
+    if (!open) setPlayingId(null)
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open, onClose])
+
+  useEffect(() => {
+    if (open) {
+      const prev = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+      return () => {
+        document.body.style.overflow = prev
+      }
+    }
+  }, [open])
+
+  if (!open) return null
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-md" />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.2 }}
+        className="relative z-10 w-full max-w-7xl max-h-[92vh] overflow-y-auto border border-white/10 bg-slate-900/95 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+      >
+        <div className="sticky top-0 z-20 flex items-start justify-between gap-4 border-b border-white/10 bg-slate-900/95 px-5 py-4 md:px-7">
+          <div>
+            <h2 id={titleId} className="font-black italic text-white text-lg md:text-xl tracking-tight">
+              {heading}
+            </h2>
+            <p className="text-slate-500 text-xs font-mono mt-1">{blurb}</p>
+            <a
+              href={albumUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-fuchsia-500/90 hover:text-fuchsia-400 text-[10px] font-mono mt-2 inline-block"
+            >
+              Open album on Imgur ↗
+            </a>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="shrink-0 p-2 border border-white/10 text-slate-400 hover:text-white hover:border-fuchsia-500/50 transition-colors"
+            aria-label="Close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="p-5 md:p-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {videos.map((v) => {
+              const isPlaying = playingId === v.id
+              return (
+                <article
+                  key={v.id}
+                  className={
+                    'group border transition-colors bg-slate-950/70 ' +
+                    (isPlaying ? 'border-fuchsia-500/50' : 'border-white/10 hover:border-white/20')
+                  }
+                >
+                  <div className="aspect-video bg-black">
+                    {isPlaying ? (
+                      <video
+                        key={v.id}
+                        controls
+                        autoPlay
+                        playsInline
+                        preload="metadata"
+                        className="w-full h-full object-cover"
+                      >
+                        <source src={v.src} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setPlayingId(v.id)}
+                        className="relative w-full h-full"
+                        aria-label={`Play ${v.label}`}
+                      >
+                        <img
+                          src={`https://i.imgur.com/${v.id}.jpg`}
+                          alt={v.label}
+                          className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 transition-opacity"
+                        />
+                        <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+                        <span className="absolute inset-0 flex items-center justify-center">
+                          <span className="flex items-center justify-center w-14 h-14 rounded-full bg-black/60 border border-white/20 group-hover:border-fuchsia-400/60 transition-colors">
+                            <Play size={20} fill="white" className="text-white ml-0.5" />
+                          </span>
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                  <div className="px-3 py-3">
+                    <p className="text-[10px] font-mono text-fuchsia-400/90 uppercase tracking-[0.18em] mb-1">
+                      {badge}
+                    </p>
+                    <p className="text-sm text-white font-semibold leading-snug">{v.label}</p>
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
 
 function SectionHeader({ title, subtitle }) {
   return (
@@ -30,31 +220,36 @@ function SectionHeader({ title, subtitle }) {
 const performances = [
   {
     id: 'TR_01',
-    title: 'Talent Finale',
-    subtitle: '7th Grade — 1st Place',
+    title: 'talent shows',
+    subtitle: '7th grade- first place, 8th grade-second',
     date: '2024',
     type: 'Main Stage',
     img: 'https://i.imgur.com/J7GCxTv.png',
   },
   {
     id: 'TR_02',
-    title: '6th Grade Alpha',
+    title: 'first performance',
     subtitle: 'Debut Performance',
     date: '2023',
     type: 'Archived',
     img: 'https://i.imgur.com/GA9ZfgG.jpeg',
+    videoGalleryKey: 'first',
   },
   {
     id: 'TR_03',
-    title: 'Acoustic Session',
+    title: 'second preformance',
     subtitle: 'Guitar + Vocal Showcase',
     date: '2024',
     type: 'Studio Feed',
-    img: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=800&q=80',
+    img: 'https://i.imgur.com/78dJrjU.png',
+    videoGalleryKey: 'second',
   },
 ]
 
 export default function Music() {
+  const [galleryKey, setGalleryKey] = useState(null)
+  const galleryProps = galleryKey ? GALLERY_CONFIG[galleryKey] : null
+
   return (
     <section
       id="music"
@@ -75,7 +270,10 @@ export default function Music() {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
               whileHover={{ y: -6 }}
-              className="group relative h-[340px] sm:h-[420px] md:h-[560px] overflow-hidden bg-slate-900 border border-white/5 cursor-default"
+              className={
+                'group relative h-[340px] sm:h-[420px] md:h-[560px] overflow-hidden bg-slate-900 border border-white/5 ' +
+                (item.videoGalleryKey ? 'cursor-pointer' : 'cursor-default')
+              }
             >
               <img
                 src={item.img}
@@ -94,9 +292,19 @@ export default function Music() {
                   </span>
                 </div>
 
-                <h3 className="text-2xl md:text-3xl font-black italic uppercase text-white mb-1 leading-none group-hover:text-fuchsia-400 transition-colors duration-300">
-                  {item.title}
-                </h3>
+                {item.videoGalleryKey ? (
+                  <button
+                    type="button"
+                    onClick={() => setGalleryKey(item.videoGalleryKey)}
+                    className="text-2xl md:text-3xl font-black italic text-left w-full text-white mb-1 leading-none group-hover:text-fuchsia-400 transition-colors duration-300"
+                  >
+                    {item.title}
+                  </button>
+                ) : (
+                  <h3 className="text-2xl md:text-3xl font-black italic uppercase text-white mb-1 leading-none group-hover:text-fuchsia-400 transition-colors duration-300">
+                    {item.title}
+                  </h3>
+                )}
                 <p className="text-slate-500 text-xs md:text-sm mb-3 md:mb-4">{item.subtitle}</p>
 
                 <div className="flex justify-between items-center">
@@ -194,6 +402,19 @@ export default function Music() {
           </motion.div>
         </div>
       </div>
+
+      {galleryProps && (
+        <PerformanceVideoModal
+          open
+          onClose={() => setGalleryKey(null)}
+          heading={galleryProps.heading}
+          badge={galleryProps.badge}
+          blurb={galleryProps.blurb}
+          albumUrl={galleryProps.albumUrl}
+          videos={galleryProps.videos}
+          titleId={galleryProps.titleId}
+        />
+      )}
     </section>
   )
 }

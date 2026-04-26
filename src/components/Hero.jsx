@@ -25,7 +25,7 @@ export default function Hero() {
         <div
           className="absolute inset-0 lg:hidden bg-cover bg-top"
           style={{
-            backgroundImage: `url('https://i.imgur.com/J7GCxTv.png')`,
+            backgroundImage: `url('https://i.imgur.com/NBhROlM.png')`,
             filter: 'grayscale(70%) brightness(0.30)',
           }}
         />
@@ -33,7 +33,7 @@ export default function Hero() {
         <div
           className="absolute inset-0 hidden lg:block bg-cover bg-center"
           style={{
-            backgroundImage: `url('https://i.imgur.com/xqXiC44.png')`,
+            backgroundImage: `url('https://i.imgur.com/NBhROlM.png')`,
             filter: 'grayscale(65%) brightness(0.28)',
           }}
         />
