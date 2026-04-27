@@ -40,13 +40,46 @@ const SECOND_PERFORMANCE_VIDEOS = [
   },
 ]
 
+/** Talent show performances on YouTube */
+const TALENT_SHOWS_VIDEOS = [
+  {
+    id: 'qxWpDhDfm_Q',
+    label: '6th grade talent show',
+    youtubeId: 'qxWpDhDfm_Q',
+  },
+  {
+    id: 'Q4PBY5wNnQo',
+    label: '7th grade talent show',
+    youtubeId: 'Q4PBY5wNnQo',
+  },
+  {
+    id: 'GkskvZSHw8o',
+    label: '8th grade talent show',
+    youtubeId: 'GkskvZSHw8o',
+  },
+]
+
 const GALLERY_CONFIG = {
+  talentShows: {
+    videos: TALENT_SHOWS_VIDEOS,
+    heading: 'talent shows',
+    badge: 'Talent shows',
+    blurb: 'Talent show archive — YouTube-style grid. Pick a clip; playback uses YouTube (no autoplay).',
+    footerLink: {
+      href: 'https://www.youtube.com/@MiaEF10',
+      label: 'YouTube channel @MiaEF10 ↗',
+    },
+    titleId: 'performance-gallery-talent-title',
+  },
   first: {
     videos: FIRST_PERFORMANCE_VIDEOS,
     heading: 'first performance',
     badge: 'First Performance',
     blurb: 'Debut day archive — YouTube-style grid. Videos play only after click.',
-    albumUrl: 'https://imgur.com/a/znOrPok',
+    footerLink: {
+      href: 'https://imgur.com/a/znOrPok',
+      label: 'Open album on Imgur ↗',
+    },
     titleId: 'performance-gallery-first-title',
   },
   second: {
@@ -54,12 +87,20 @@ const GALLERY_CONFIG = {
     heading: 'second preformance',
     badge: 'Second preformance',
     blurb: 'Second preformance archive — YouTube-style grid. Videos play only after click.',
-    albumUrl: 'https://imgur.com/a/jIhyjf5',
+    footerLink: {
+      href: 'https://imgur.com/a/jIhyjf5',
+      label: 'Open album on Imgur ↗',
+    },
     titleId: 'performance-gallery-second-title',
   },
 }
 
-function PerformanceVideoModal({ open, onClose, heading, badge, blurb, albumUrl, videos, titleId }) {
+function galleryThumbSrc(v) {
+  if (v.youtubeId) return `https://i.ytimg.com/vi/${v.youtubeId}/hqdefault.jpg`
+  return `https://i.imgur.com/${v.id}.jpg`
+}
+
+function PerformanceVideoModal({ open, onClose, heading, badge, blurb, footerLink, videos, titleId }) {
   const [playingId, setPlayingId] = useState(null)
 
   useEffect(() => {
@@ -110,14 +151,16 @@ function PerformanceVideoModal({ open, onClose, heading, badge, blurb, albumUrl,
               {heading}
             </h2>
             <p className="text-slate-500 text-xs font-mono mt-1">{blurb}</p>
-            <a
-              href={albumUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="text-fuchsia-500/90 hover:text-fuchsia-400 text-[10px] font-mono mt-2 inline-block"
-            >
-              Open album on Imgur ↗
-            </a>
+            {footerLink && (
+              <a
+                href={footerLink.href}
+                target="_blank"
+                rel="noreferrer"
+                className="text-fuchsia-500/90 hover:text-fuchsia-400 text-[10px] font-mono mt-2 inline-block"
+              >
+                {footerLink.label}
+              </a>
+            )}
           </div>
           <button
             type="button"
@@ -141,28 +184,39 @@ function PerformanceVideoModal({ open, onClose, heading, badge, blurb, albumUrl,
                     (isPlaying ? 'border-fuchsia-500/50' : 'border-white/10 hover:border-white/20')
                   }
                 >
-                  <div className="aspect-video bg-black">
+                  <div className="aspect-video bg-black relative">
                     {isPlaying ? (
-                      <video
-                        key={v.id}
-                        controls
-                        autoPlay
-                        playsInline
-                        preload="metadata"
-                        className="w-full h-full object-cover"
-                      >
-                        <source src={v.src} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
+                      v.youtubeId ? (
+                        <iframe
+                          key={v.youtubeId}
+                          title={v.label}
+                          src={`https://www.youtube.com/embed/${v.youtubeId}?rel=0`}
+                          className="absolute inset-0 h-full w-full"
+                          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <video
+                          key={v.id}
+                          controls
+                          autoPlay
+                          playsInline
+                          preload="metadata"
+                          className="absolute inset-0 h-full w-full object-cover"
+                        >
+                          <source src={v.src} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      )
                     ) : (
                       <button
                         type="button"
                         onClick={() => setPlayingId(v.id)}
-                        className="relative w-full h-full"
+                        className="absolute inset-0 h-full w-full"
                         aria-label={`Play ${v.label}`}
                       >
                         <img
-                          src={`https://i.imgur.com/${v.id}.jpg`}
+                          src={galleryThumbSrc(v)}
                           alt={v.label}
                           className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 transition-opacity"
                         />
@@ -221,10 +275,11 @@ const performances = [
   {
     id: 'TR_01',
     title: 'talent shows',
-    subtitle: '7th grade- first place, 8th grade-second',
+    subtitle: '6th grade-no place, 7th grade- first place, 8th grade- second place',
     date: '2024',
     type: 'Main Stage',
     img: 'https://i.imgur.com/J7GCxTv.png',
+    videoGalleryKey: 'talentShows',
   },
   {
     id: 'TR_02',
@@ -265,6 +320,13 @@ export default function Music() {
           {performances.map((item, idx) => (
             <motion.div
               key={item.id}
+              role={item.videoGalleryKey ? 'button' : undefined}
+              tabIndex={item.videoGalleryKey ? 0 : undefined}
+              aria-label={
+                item.videoGalleryKey
+                  ? `Open ${item.title} video gallery`
+                  : undefined
+              }
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -273,6 +335,19 @@ export default function Music() {
               className={
                 'group relative h-[340px] sm:h-[420px] md:h-[560px] overflow-hidden bg-slate-900 border border-white/5 ' +
                 (item.videoGalleryKey ? 'cursor-pointer' : 'cursor-default')
+              }
+              onClick={
+                item.videoGalleryKey ? () => setGalleryKey(item.videoGalleryKey) : undefined
+              }
+              onKeyDown={
+                item.videoGalleryKey
+                  ? (e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault()
+                        setGalleryKey(item.videoGalleryKey)
+                      }
+                    }
+                  : undefined
               }
             >
               <img
@@ -293,13 +368,9 @@ export default function Music() {
                 </div>
 
                 {item.videoGalleryKey ? (
-                  <button
-                    type="button"
-                    onClick={() => setGalleryKey(item.videoGalleryKey)}
-                    className="text-2xl md:text-3xl font-black italic text-left w-full text-white mb-1 leading-none group-hover:text-fuchsia-400 transition-colors duration-300"
-                  >
+                  <h3 className="text-2xl md:text-3xl font-black italic text-left w-full text-white mb-1 leading-none group-hover:text-fuchsia-400 transition-colors duration-300">
                     {item.title}
-                  </button>
+                  </h3>
                 ) : (
                   <h3 className="text-2xl md:text-3xl font-black italic uppercase text-white mb-1 leading-none group-hover:text-fuchsia-400 transition-colors duration-300">
                     {item.title}
@@ -410,7 +481,7 @@ export default function Music() {
           heading={galleryProps.heading}
           badge={galleryProps.badge}
           blurb={galleryProps.blurb}
-          albumUrl={galleryProps.albumUrl}
+          footerLink={galleryProps.footerLink}
           videos={galleryProps.videos}
           titleId={galleryProps.titleId}
         />

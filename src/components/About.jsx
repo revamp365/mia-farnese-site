@@ -1,5 +1,5 @@
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Star, Guitar } from 'lucide-react'
 
 function SectionHeader({ title, subtitle }) {
@@ -28,11 +28,50 @@ function SectionHeader({ title, subtitle }) {
   )
 }
 
+/** Image-only slideshow — album https://imgur.com/a/TmfGcZB (videos omitted) */
+const ABOUT_GALLERY_SLIDE_MS = 4500
+
+const ABOUT_GALLERY_IMAGES = [
+  'https://i.imgur.com/J7GCxTv.png',
+  'https://i.imgur.com/GA9ZfgG.jpeg',
+  'https://i.imgur.com/xqXiC44.png',
+  'https://i.imgur.com/dWpa2Cp.jpeg',
+  'https://i.imgur.com/pwxnZz0.jpeg',
+  'https://i.imgur.com/eofGhrO.jpeg',
+  'https://i.imgur.com/sF9FU3i.jpeg',
+  'https://i.imgur.com/Gbwaiqi.jpeg',
+  'https://i.imgur.com/ghnJnHO.jpeg',
+  'https://i.imgur.com/CPpblfX.jpeg',
+  'https://i.imgur.com/64cGfBj.jpeg',
+  'https://i.imgur.com/pl7KhhY.jpeg',
+  'https://i.imgur.com/oarhVhP.jpeg',
+  'https://i.imgur.com/bAbo6w3.jpeg',
+  'https://i.imgur.com/ZQc4Ipo.jpeg',
+  'https://i.imgur.com/nvnGbnX.jpeg',
+  'https://i.imgur.com/tkLndPY.jpeg',
+  'https://i.imgur.com/mGcCAT9.jpeg',
+  'https://i.imgur.com/peEFDql.jpeg',
+  'https://i.imgur.com/aGnp466.jpeg',
+  'https://i.imgur.com/NDZZjwR.jpeg',
+  'https://i.imgur.com/smrvfYv.jpeg',
+  'https://i.imgur.com/md9TnGg.jpeg',
+  'https://i.imgur.com/m4u1678.jpeg',
+  'https://i.imgur.com/5lc5m3R.jpeg',
+  'https://i.imgur.com/NBhROlM.jpeg',
+  'https://i.imgur.com/VgjGMQb.jpeg',
+  'https://i.imgur.com/an26MPq.jpeg',
+  'https://i.imgur.com/dzdkFvK.jpeg',
+  'https://i.imgur.com/A54wnFe.jpeg',
+  'https://i.imgur.com/doP5GB9.jpeg',
+  'https://i.imgur.com/R58jF0v.jpeg',
+]
+
 const milestones = [
   {
     year: '2023',
     title: '6th Grade Debut',
-    detail: 'First public performance — the spark that started everything.',
+    detail:
+      "Singing at talent show, but didn't give up after not placing.",
   },
   {
     year: '2024',
@@ -41,20 +80,30 @@ const milestones = [
     highlight: true,
   },
   {
-    year: '2024',
-    title: 'Acoustic Guitar',
-    detail: 'Expanded her artistry by picking up guitar alongside vocals.',
+    year: '2025',
+    title: 'Go Big or Go Home',
+    detail:
+      'Got second place in the talent show and had 2 gigs later, showing passion and dedication.',
   },
   {
-    year: '2025',
-    title: '8th Grade Chapter',
-    detail: 'Preparing for the next stage of her growing musical story.',
+    year: '2026',
+    title: 'What Next?',
+    detail: "Follow Mia's journey to not only see more, but hear more music!",
   },
 ]
 
 export default function About() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
+  const [slideIndex, setSlideIndex] = useState(0)
+
+  useEffect(() => {
+    if (ABOUT_GALLERY_IMAGES.length <= 1) return
+    const id = window.setInterval(() => {
+      setSlideIndex((i) => (i + 1) % ABOUT_GALLERY_IMAGES.length)
+    }, ABOUT_GALLERY_SLIDE_MS)
+    return () => window.clearInterval(id)
+  }, [])
 
   return (
     <section id="about" className="py-16 md:py-32 px-6 md:px-16 lg:px-24 bg-slate-950 relative overflow-hidden">
@@ -67,7 +116,7 @@ export default function About() {
       />
 
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-10 md:gap-20 items-center">
-        {/* Video column */}
+        {/* Hero image column (album TmfGcZB) */}
         <motion.div
           ref={ref}
           initial={{ scale: 0.96, opacity: 0 }}
@@ -76,17 +125,20 @@ export default function About() {
           className="relative group"
         >
           <div className="relative z-10 aspect-[3/4] md:aspect-[4/5] bg-slate-900 border border-fuchsia-500/15 overflow-hidden">
-            <video
-              className="w-full h-full object-cover grayscale opacity-55 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-1000"
-              autoPlay
-              muted
-              loop
-              playsInline
-            >
-              <source src="https://i.imgur.com/hzzt3ip.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent opacity-70 group-hover:opacity-40 transition-opacity duration-1000" />
-            <div className="absolute inset-0 border border-fuchsia-500/0 group-hover:border-fuchsia-500/25 transition-all duration-700 m-4" />
+            <AnimatePresence initial={false}>
+              <motion.img
+                key={slideIndex}
+                src={ABOUT_GALLERY_IMAGES[slideIndex]}
+                alt={`Mia Farnese — photo ${slideIndex + 1} of ${ABOUT_GALLERY_IMAGES.length}`}
+                className="absolute inset-0 w-full h-full object-cover grayscale opacity-55 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-1000"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.65 }}
+              />
+            </AnimatePresence>
+            <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-slate-950/70 via-transparent opacity-70 group-hover:opacity-40 transition-opacity duration-1000" />
+            <div className="absolute inset-0 z-10 pointer-events-none border border-fuchsia-500/0 group-hover:border-fuchsia-500/25 transition-all duration-700 m-4" />
           </div>
 
           <div className="absolute -top-10 -right-10 w-48 h-48 pointer-events-none hidden md:block"
@@ -102,20 +154,21 @@ export default function About() {
           <SectionHeader title="The Origin" subtitle="System_Profile" />
 
           <p className="text-lg md:text-xl lg:text-2xl text-slate-300 leading-relaxed font-light italic">
-            "At 13, I don't just want to be heard — I want to be felt."
+            {
+              '"Music brings people together — that\'s a power truly anyone could harness with hard work and dedication."'
+            }
           </p>
 
           <p className="text-slate-400 leading-relaxed text-sm md:text-base">
-            Mia Farnese has spent her early years refining a sound that is both technically precise
-            and emotionally raw. From the first strum in her 6th-grade debut to her 1st place
-            victory in the 7th-grade talent show, her journey is marked by a relentless drive for
-            acoustic mastery.
+            {
+              "Mia Farnese has spent years pouring time and heart into her music, shaping a sound that's both polished and deeply genuine. From her early performances to the moments she's truly stood out on stage, every step has come from real dedication and practice."
+            }
           </p>
 
           <p className="text-slate-500 leading-relaxed text-sm">
-            In the past year she expanded her musical horizons by picking up the acoustic guitar,
-            adding another dimension to her already impressive vocal talents. As she prepares for
-            her 8th grade performance, there's no doubt she'll continue to amaze.
+            {
+              "Along the way, she's continued to push herself—refining her vocals and guitar work and adding new depth to her sound—growing into an artist who connects just as much as she impresses."
+            }
           </p>
 
           {/* Stat cards */}
@@ -143,10 +196,10 @@ export default function About() {
                 <Guitar size={22} />
               </div>
               <h4 className="font-bold text-white uppercase tracking-tighter text-sm md:text-base mb-1">
-                Acoustic Edge
+                Debut preformance
               </h4>
-              <p className="text-[9px] md:text-[10px] text-slate-500 uppercase font-mono tracking-widest">
-                Guitar + Vocal Mastery
+              <p className="text-[9px] md:text-[10px] text-slate-500 uppercase font-mono tracking-widest leading-relaxed">
+                First preformance at Ashleys Bar and Resturant
               </p>
             </motion.div>
           </div>
