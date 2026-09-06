@@ -1,18 +1,20 @@
-import { Youtube, Instagram } from 'lucide-react'
+import { Youtube, Instagram } from "lucide-react";
 
 const links = [
-  { label: 'Home', id: 'home' },
-  { label: 'Bio', id: 'about' },
-  { label: 'Music', id: 'music' },
-  { label: 'Gallery', id: 'gallery' },
-  { label: 'Contact', id: 'contact' },
-]
+  { label: "Home", id: "home" },
+  { label: "Bio", id: "about" },
+  { label: "Music", id: "music" },
+  { label: "Gallery", id: "gallery" },
+  { label: "Contact", id: "contact" },
+];
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   const scrollTo = (id) =>
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
     <footer className="py-14 md:py-24 px-6 md:px-16 lg:px-24 relative bg-slate-950 overflow-hidden border-t border-white/5">
@@ -26,20 +28,24 @@ export default function Footer() {
             <div className="text-2xl md:text-3xl font-black italic tracking-tighter text-white mb-3 md:mb-4">
               MF<span className="text-fuchsia-500">.</span>
             </div>
-            <p className="text-slate-500 text-sm leading-relaxed mb-5 max-w-xs">
-              A rising singer and guitarist whose voice captivates audiences. The journey is just
-              beginning.
+            <p className="text-slate-400 text-sm leading-relaxed mb-5 max-w-xs">
+              A rising singer and guitarist whose voice captivates audiences.
+              The journey is just beginning.
             </p>
             <div className="flex gap-3">
               <button
-                onClick={() => window.open('https://www.youtube.com/@MiaEF10', '_blank')}
+                onClick={() =>
+                  window.open("https://www.youtube.com/@MiaEF10", "_blank")
+                }
                 className="w-9 h-9 flex items-center justify-center border border-white/8 text-white/35 hover:border-red-500/50 hover:text-red-400 transition-all duration-300"
                 aria-label="YouTube"
               >
                 <Youtube size={14} />
               </button>
               <button
-                onClick={() => window.open('https://www.instagram.com/miaamusic_/', '_blank')}
+                onClick={() =>
+                  window.open("https://www.instagram.com/miaamusic_/", "_blank")
+                }
                 className="w-9 h-9 flex items-center justify-center border border-white/8 text-white/35 hover:border-fuchsia-500/50 hover:text-fuchsia-400 transition-all duration-300"
                 aria-label="Instagram"
               >
@@ -50,7 +56,7 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h4 className="text-white/25 font-mono text-[9px] uppercase tracking-[0.3em] mb-4 md:mb-5">
+            <h4 className="text-white/25 font-mono text-[12px] uppercase tracking-[0.3em] mb-4 md:mb-5">
               Navigation
             </h4>
             <ul className="space-y-2.5 md:space-y-3">
@@ -58,7 +64,7 @@ export default function Footer() {
                 <li key={link.id}>
                   <button
                     onClick={() => scrollTo(link.id)}
-                    className="text-slate-500 hover:text-fuchsia-400 font-mono uppercase tracking-widest text-[10px] transition-colors duration-200"
+                    className="text-slate-400 hover:text-fuchsia-400 font-mono uppercase tracking-widest text-[12px] transition-colors duration-200"
                   >
                     {link.label}
                   </button>
@@ -69,15 +75,23 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-white/25 font-mono text-[9px] uppercase tracking-[0.3em] mb-4 md:mb-5">
+            <h4 className="text-white/25 font-mono text-[12px] uppercase tracking-[0.3em] mb-4 md:mb-5">
               Contact
             </h4>
             <div className="space-y-2.5 md:space-y-3">
-              <p className="text-slate-500 text-[11px] font-mono">Available for bookings nationwide</p>
-              <p className="text-slate-500 text-[11px] font-mono">Weekends & school breaks</p>
+              <p className="text-slate-400 text-[12px] font-mono">
+                Available for bookings nationwide
+              </p>
+              <p className="text-slate-400 text-[12px] font-mono">
+                Weekends & school breaks
+              </p>
               <button
-                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                className="text-fuchsia-500/60 hover:text-fuchsia-400 text-[11px] font-mono transition-colors"
+                onClick={() =>
+                  document
+                    .getElementById("contact")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+                className="text-fuchsia-500/60 hover:text-fuchsia-400 text-[12px] font-mono transition-colors"
               >
                 Use the contact form →
               </button>
@@ -90,12 +104,12 @@ export default function Footer() {
           <div className="text-2xl md:text-3xl font-black italic tracking-tighter text-white">
             MF<span className="text-fuchsia-500">.</span>
           </div>
-          <p className="text-[9px] font-mono tracking-[0.2em] uppercase text-slate-600 text-center">
+          <p className="text-[12px] font-mono tracking-[0.2em] uppercase text-slate-400 text-center">
             &copy; {currentYear} Mia Farnese // All Rights Reserved
           </p>
-          <div className="flex items-center gap-2 text-[9px] font-mono uppercase tracking-widest text-fuchsia-500">
+          <div className="flex items-center gap-2 text-[12px] font-mono uppercase tracking-widest text-fuchsia-500">
             <span className="w-1.5 h-1.5 rounded-full bg-fuchsia-500 animate-ping" />
-            Pulse: Steady
+            Made for the music
           </div>
         </div>
       </div>
@@ -105,5 +119,5 @@ export default function Footer() {
         MIA
       </div>
     </footer>
-  )
+  );
 }

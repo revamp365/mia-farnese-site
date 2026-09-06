@@ -1,40 +1,41 @@
-import { useState, useRef, useEffect } from 'react'
-import { MessageCircle, X, Send, User, Mail, Phone } from 'lucide-react'
-import { Button } from './ui/button'
-import { Input } from './ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import emailjs from '@emailjs/browser'
+import { useState, useRef, useEffect } from "react";
+import { MessageCircle, X, Send, User, Mail, Phone } from "lucide-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import emailjs from "@emailjs/browser";
 
 export default function Chat() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 1,
       text: "Hi! I'm here to help with any questions about Mia's music or performances. How can I assist you?",
-      sender: 'bot',
-      timestamp: new Date()
-    }
-  ])
-  const [newMessage, setNewMessage] = useState('')
+      sender: "bot",
+      timestamp: new Date(),
+    },
+  ]);
+  const [newMessage, setNewMessage] = useState("");
   const [visitorInfo, setVisitorInfo] = useState({
-    name: '',
-    email: '',
-    phone: ''
-  })
-  const [showContactForm, setShowContactForm] = useState(false)
-  const messagesEndRef = useRef(null)
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const [showContactForm, setShowContactForm] = useState(false);
+  const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    if (isOpen) scrollToBottom();
+  }, [messages, isOpen]);
 
   const sendToSlack = async (message, visitorData) => {
-    const slackWebhookUrl = import.meta.env.VITE_SLACK_WEBHOOK_URL || 'YOUR_SLACK_WEBHOOK_URL_HERE'
-    
+    const slackWebhookUrl = import.meta.env.VITE_SLACK_WEBHOOK_URL;
+    if (!slackWebhookUrl) return false;
+
     const slackMessage = {
       text: `🎵 New inquiry from Mia Farnese website`,
       attachments: [
@@ -44,126 +45,142 @@ export default function Chat() {
             {
               title: "Message",
               value: message,
-              short: false
+              short: false,
             },
             {
               title: "Visitor Info",
-              value: `Name: ${visitorData.name || 'Not provided'}\nEmail: ${visitorData.email || 'Not provided'}\nPhone: ${visitorData.phone || 'Not provided'}`,
-              short: false
+              value: `Name: ${visitorData.name || "Not provided"}\nEmail: ${visitorData.email || "Not provided"}\nPhone: ${visitorData.phone || "Not provided"}`,
+              short: false,
             },
             {
               title: "Timestamp",
               value: new Date().toLocaleString(),
-              short: true
+              short: true,
             },
             {
               title: "Website",
               value: "mia-farnese.com",
-              short: true
-            }
-          ]
-        }
-      ]
-    }
+              short: true,
+            },
+          ],
+        },
+      ],
+    };
 
     try {
-      await fetch(slackWebhookUrl, {
-        method: 'POST',
+      const response = await fetch(slackWebhookUrl, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(slackMessage)
-      })
+        body: JSON.stringify(slackMessage),
+      });
+      return response.ok;
     } catch (error) {
-      console.error('Error sending to Slack:', error)
+      return false;
     }
-  }
+  };
 
-  const sendEmailNotification = async (message, visitorData, isNewChat = false) => {
+  const sendEmailNotification = async (
+    message,
+    visitorData,
+    isNewChat = false,
+  ) => {
     try {
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_CHAT_TEMPLATE_ID,
         {
-          from_name: visitorData.name || 'Anonymous',
-          from_email: visitorData.email || 'No email provided',
+          from_name: visitorData.name || "Anonymous",
+          from_email: visitorData.email || "No email provided",
           message: message,
-          phone: visitorData.phone || 'Not provided',
-          to_email: 'drew@revamp365.net',
-          chat_type: isNewChat ? 'New Chat Started' : 'Chat Message',
-          timestamp: new Date().toLocaleString()
+          phone: visitorData.phone || "Not provided",
+          to_email: "drew@revamp365.net",
+          chat_type: isNewChat ? "New Chat Started" : "Chat Message",
+          timestamp: new Date().toLocaleString(),
         },
-        import.meta.env.VITE_EMAILJS_USER_ID
-      )
+        import.meta.env.VITE_EMAILJS_USER_ID,
+      );
+      return true;
     } catch (error) {
-      console.error('Error sending email notification:', error)
+      return false;
     }
-  }
+  };
 
   const handleSendMessage = async () => {
-    if (!newMessage.trim()) return
+    if (!newMessage.trim()) return;
 
     const userMessage = {
       id: Date.now(),
       text: newMessage,
-      sender: 'user',
-      timestamp: new Date()
-    }
+      sender: "user",
+      timestamp: new Date(),
+    };
 
-    setMessages(prev => [...prev, userMessage])
-    
+    setMessages((prev) => [...prev, userMessage]);
+
     // Send to Slack and Email
-    await Promise.all([
+    const delivered = await Promise.all([
       sendToSlack(newMessage, visitorInfo),
-      sendEmailNotification(newMessage, visitorInfo, false)
-    ])
-    
+      sendEmailNotification(newMessage, visitorInfo, false),
+    ]);
+
     // Auto-reply
     setTimeout(() => {
       const botReply = {
         id: Date.now() + 1,
-        text: "Thanks for your message! I've forwarded it to Mia's team. They'll get back to you soon! 🎵",
-        sender: 'bot',
-        timestamp: new Date()
-      }
-      setMessages(prev => [...prev, botReply])
-    }, 1000)
+        text: delivered.some(Boolean)
+          ? "Thanks! Your message has been sent to Mia’s team."
+          : "Your message could not be delivered. Please try again, or contact Mia on Instagram at @miaamusic_.",
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botReply]);
+    }, 1000);
 
-    setNewMessage('')
-  }
+    setNewMessage("");
+  };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
-  }
+  };
 
   const openChat = () => {
-    setIsOpen(true)
+    setIsOpen(true);
     if (!visitorInfo.name && !visitorInfo.email) {
-      setShowContactForm(true)
+      setShowContactForm(true);
     }
-  }
+  };
 
   const closeChat = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   const submitContactInfo = async () => {
-    setShowContactForm(false)
+    setShowContactForm(false);
     // Send initial greeting with contact info to both Slack and Email
     await Promise.all([
-      sendToSlack(`New visitor started chat: ${visitorInfo.name} (${visitorInfo.email})`, visitorInfo),
-      sendEmailNotification(`New visitor started chat: ${visitorInfo.name} (${visitorInfo.email})`, visitorInfo, true)
-    ])
-  }
+      sendToSlack(
+        `New visitor started chat: ${visitorInfo.name} (${visitorInfo.email})`,
+        visitorInfo,
+      ),
+      sendEmailNotification(
+        `New visitor started chat: ${visitorInfo.name} (${visitorInfo.email})`,
+        visitorInfo,
+        true,
+      ),
+    ]);
+  };
 
   return (
     <>
       {/* Chat Toggle Button */}
       {!isOpen && (
         <button
+          aria-label="Message Mia’s team"
           onClick={openChat}
           className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 w-14 h-14 bg-primary hover:bg-primary/90 text-black rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300"
         >
@@ -184,6 +201,7 @@ export default function Chat() {
                 <Button
                   variant="ghost"
                   size="sm"
+                  aria-label="Close chat"
                   onClick={closeChat}
                   className="text-white hover:bg-white/20 p-1 h-8 w-8"
                 >
@@ -196,31 +214,59 @@ export default function Chat() {
               {/* Contact Form Modal */}
               {showContactForm && (
                 <div className="absolute inset-0 bg-black/80 rounded-2xl flex items-center justify-center z-10">
-                  <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 m-4 w-full">
-                    <h3 className="text-white text-lg font-bold mb-4">Let's get to know you!</h3>
+                  <div className="bg-slate-900 rounded-xl p-6 m-4 w-full">
+                    <button
+                      type="button"
+                      onClick={closeChat}
+                      aria-label="Close chat"
+                      className="float-right text-white p-1"
+                    >
+                      <X size={20} />
+                    </button>
+                    <h3 className="text-white text-lg font-bold mb-4">
+                      Let's get to know you!
+                    </h3>
                     <div className="space-y-3">
                       <div>
                         <Input
+                          aria-label="Your name"
                           placeholder="Your name"
                           value={visitorInfo.name}
-                          onChange={(e) => setVisitorInfo(prev => ({ ...prev, name: e.target.value }))}
+                          onChange={(e) =>
+                            setVisitorInfo((prev) => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
                           className="bg-white/20 border-white/30 text-white placeholder:text-white/70"
                         />
                       </div>
                       <div>
                         <Input
                           type="email"
+                          aria-label="Email address"
                           placeholder="Email address"
                           value={visitorInfo.email}
-                          onChange={(e) => setVisitorInfo(prev => ({ ...prev, email: e.target.value }))}
+                          onChange={(e) =>
+                            setVisitorInfo((prev) => ({
+                              ...prev,
+                              email: e.target.value,
+                            }))
+                          }
                           className="bg-white/20 border-white/30 text-white placeholder:text-white/70"
                         />
                       </div>
                       <div>
                         <Input
+                          aria-label="Phone (optional)"
                           placeholder="Phone (optional)"
                           value={visitorInfo.phone}
-                          onChange={(e) => setVisitorInfo(prev => ({ ...prev, phone: e.target.value }))}
+                          onChange={(e) =>
+                            setVisitorInfo((prev) => ({
+                              ...prev,
+                              phone: e.target.value,
+                            }))
+                          }
                           className="bg-white/20 border-white/30 text-white placeholder:text-white/70"
                         />
                       </div>
@@ -241,18 +287,21 @@ export default function Chat() {
                 {messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                    className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
                       className={`max-w-[80%] p-3 rounded-2xl ${
-                        message.sender === 'user'
-                          ? 'bg-primary text-black'
-                          : 'bg-white/20 text-white'
+                        message.sender === "user"
+                          ? "bg-primary text-black"
+                          : "bg-white/20 text-white"
                       }`}
                     >
                       <p className="text-sm">{message.text}</p>
                       <p className="text-xs opacity-70 mt-1">
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        {message.timestamp.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </p>
                     </div>
                   </div>
@@ -267,10 +316,12 @@ export default function Chat() {
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
+                    aria-label="Type your message..."
                     placeholder="Type your message..."
                     className="flex-1 bg-white/20 border-white/30 text-white placeholder:text-white/70"
                   />
                   <Button
+                    aria-label="Send message"
                     onClick={handleSendMessage}
                     disabled={!newMessage.trim()}
                     className="bg-primary hover:bg-primary/90 text-black px-4"
@@ -279,7 +330,7 @@ export default function Chat() {
                   </Button>
                 </div>
                 <p className="text-xs text-white/60 mt-2 text-center">
-                  Messages are sent to Mia's team in real-time
+                  Send a message to Mia’s team
                 </p>
               </div>
             </CardContent>
@@ -287,5 +338,5 @@ export default function Chat() {
         </div>
       )}
     </>
-  )
+  );
 }

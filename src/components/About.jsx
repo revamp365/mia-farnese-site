@@ -1,6 +1,19 @@
-import { useRef, useState, useEffect } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { Star, Guitar } from 'lucide-react'
+import { responsivePhoto } from "../lib/photos";
+import { useRef, useState, useEffect } from "react";
+import {
+  motion,
+  useInView,
+  AnimatePresence,
+  useReducedMotion,
+} from "framer-motion";
+import {
+  Star,
+  Guitar,
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play,
+} from "lucide-react";
 
 function SectionHeader({ title, subtitle }) {
   return (
@@ -12,7 +25,7 @@ function SectionHeader({ title, subtitle }) {
         className="flex items-center gap-4 mb-3"
       >
         <div className="w-8 h-[2px] bg-fuchsia-500 shrink-0" />
-        <span className="text-fuchsia-500 font-mono tracking-widest text-[10px] uppercase">
+        <span className="text-fuchsia-500 font-mono tracking-widest text-[12px] uppercase">
           {subtitle}
         </span>
       </motion.div>
@@ -25,93 +38,100 @@ function SectionHeader({ title, subtitle }) {
         {title}
       </motion.h2>
     </div>
-  )
+  );
 }
 
 /** Image-only slideshow — album https://imgur.com/a/TmfGcZB (videos omitted) */
-const ABOUT_GALLERY_SLIDE_MS = 4500
+const ABOUT_GALLERY_SLIDE_MS = 4500;
 
 const ABOUT_GALLERY_IMAGES = [
-  'https://i.imgur.com/J7GCxTv.png',
-  'https://i.imgur.com/GA9ZfgG.jpeg',
-  'https://i.imgur.com/xqXiC44.png',
-  'https://i.imgur.com/dWpa2Cp.jpeg',
-  'https://i.imgur.com/pwxnZz0.jpeg',
-  'https://i.imgur.com/eofGhrO.jpeg',
-  'https://i.imgur.com/sF9FU3i.jpeg',
-  'https://i.imgur.com/Gbwaiqi.jpeg',
-  'https://i.imgur.com/ghnJnHO.jpeg',
-  'https://i.imgur.com/CPpblfX.jpeg',
-  'https://i.imgur.com/64cGfBj.jpeg',
-  'https://i.imgur.com/pl7KhhY.jpeg',
-  'https://i.imgur.com/oarhVhP.jpeg',
-  'https://i.imgur.com/bAbo6w3.jpeg',
-  'https://i.imgur.com/ZQc4Ipo.jpeg',
-  'https://i.imgur.com/nvnGbnX.jpeg',
-  'https://i.imgur.com/tkLndPY.jpeg',
-  'https://i.imgur.com/mGcCAT9.jpeg',
-  'https://i.imgur.com/peEFDql.jpeg',
-  'https://i.imgur.com/aGnp466.jpeg',
-  'https://i.imgur.com/NDZZjwR.jpeg',
-  'https://i.imgur.com/smrvfYv.jpeg',
-  'https://i.imgur.com/md9TnGg.jpeg',
-  'https://i.imgur.com/m4u1678.jpeg',
-  'https://i.imgur.com/5lc5m3R.jpeg',
-  'https://i.imgur.com/NBhROlM.jpeg',
-  'https://i.imgur.com/VgjGMQb.jpeg',
-  'https://i.imgur.com/an26MPq.jpeg',
-  'https://i.imgur.com/dzdkFvK.jpeg',
-  'https://i.imgur.com/A54wnFe.jpeg',
-  'https://i.imgur.com/doP5GB9.jpeg',
-  'https://i.imgur.com/R58jF0v.jpeg',
-]
+  "/photos/J7GCxTv.png",
+  "/photos/GA9ZfgG.jpeg",
+  "/photos/xqXiC44.png",
+  "/photos/dWpa2Cp.jpeg",
+  "/photos/pwxnZz0.jpeg",
+  "/photos/eofGhrO.jpeg",
+  "/photos/sF9FU3i.jpeg",
+  "/photos/Gbwaiqi.jpeg",
+  "/photos/ghnJnHO.jpeg",
+  "/photos/CPpblfX.jpeg",
+  "/photos/64cGfBj.jpeg",
+  "/photos/pl7KhhY.jpeg",
+  "/photos/oarhVhP.jpeg",
+  "/photos/bAbo6w3.jpeg",
+  "/photos/ZQc4Ipo.jpeg",
+  "/photos/nvnGbnX.jpeg",
+  "/photos/tkLndPY.jpeg",
+  "/photos/mGcCAT9.jpeg",
+  "/photos/peEFDql.jpeg",
+  "/photos/aGnp466.jpeg",
+  "/photos/NDZZjwR.jpeg",
+  "/photos/smrvfYv.jpeg",
+  "/photos/md9TnGg.jpeg",
+  "/photos/m4u1678.jpeg",
+  "/photos/5lc5m3R.jpeg",
+  "/photos/NBhROlM.jpeg",
+  "/photos/VgjGMQb.jpeg",
+  "/photos/an26MPq.jpeg",
+  "/photos/dzdkFvK.jpeg",
+  "/photos/A54wnFe.jpeg",
+  "/photos/doP5GB9.jpeg",
+  "/photos/R58jF0v.jpeg",
+];
 
 const milestones = [
   {
-    year: '2023',
-    title: '6th Grade Debut',
-    detail:
-      "Singing at talent show, but didn't give up after not placing.",
+    year: "2023",
+    title: "6th Grade Debut",
+    detail: "Singing at talent show, but didn't give up after not placing.",
   },
   {
-    year: '2024',
-    title: '7th Grade — 1st Place',
-    detail: 'Won the talent show, moving the audience and earning rave reviews.',
+    year: "2024",
+    title: "7th Grade — 1st Place",
+    detail:
+      "Won the talent show, moving the audience and earning rave reviews.",
     highlight: true,
   },
   {
-    year: '2025',
-    title: 'Go Big or Go Home',
+    year: "2025",
+    title: "Go Big or Go Home",
     detail:
-      'Got second place in the talent show and had 2 gigs later, showing passion and dedication.',
+      "Got second place in the talent show and had 2 gigs later, showing passion and dedication.",
   },
   {
-    year: '2026',
-    title: 'What Next?',
+    year: "2026",
+    title: "What Next?",
     detail: "Follow Mia's journey to not only see more, but hear more music!",
   },
-]
+];
 
 export default function About() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
-  const [slideIndex, setSlideIndex] = useState(0)
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (ABOUT_GALLERY_IMAGES.length <= 1) return
+    if (ABOUT_GALLERY_IMAGES.length <= 1 || paused || reducedMotion || !inView)
+      return;
     const id = window.setInterval(() => {
-      setSlideIndex((i) => (i + 1) % ABOUT_GALLERY_IMAGES.length)
-    }, ABOUT_GALLERY_SLIDE_MS)
-    return () => window.clearInterval(id)
-  }, [])
+      setSlideIndex((i) => (i + 1) % ABOUT_GALLERY_IMAGES.length);
+    }, ABOUT_GALLERY_SLIDE_MS);
+    return () => window.clearInterval(id);
+  }, [paused, reducedMotion, inView]);
 
   return (
-    <section id="about" className="py-16 md:py-32 px-6 md:px-16 lg:px-24 bg-slate-950 relative overflow-hidden">
+    <section
+      id="about"
+      className="py-16 md:py-24 px-6 md:px-16 lg:px-24 bg-slate-950 relative overflow-hidden"
+    >
       {/* Fuchsia bloom */}
       <div
         className="absolute -top-40 -left-40 w-96 h-96 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(217,70,239,0.04) 0%, transparent 70%)',
+          background:
+            "radial-gradient(circle, rgba(217,70,239,0.04) 0%, transparent 70%)",
         }}
       />
 
@@ -128,9 +148,10 @@ export default function About() {
             <AnimatePresence initial={false}>
               <motion.img
                 key={slideIndex}
-                src={ABOUT_GALLERY_IMAGES[slideIndex]}
+                {...responsivePhoto(ABOUT_GALLERY_IMAGES[slideIndex])}
+                loading="lazy"
                 alt={`Mia Farnese — photo ${slideIndex + 1} of ${ABOUT_GALLERY_IMAGES.length}`}
-                className="absolute inset-0 w-full h-full object-cover grayscale opacity-55 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-1000"
+                className="absolute inset-0 w-full h-full object-cover opacity-100 group-hover:scale-105 transition-all duration-1000"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -139,19 +160,59 @@ export default function About() {
             </AnimatePresence>
             <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-slate-950/70 via-transparent opacity-70 group-hover:opacity-40 transition-opacity duration-1000" />
             <div className="absolute inset-0 z-10 pointer-events-none border border-fuchsia-500/0 group-hover:border-fuchsia-500/25 transition-all duration-700 m-4" />
+            <div className="about-controls">
+              <button
+                aria-label="Previous photo"
+                onClick={() => {
+                  setPaused(true);
+                  setSlideIndex(
+                    (i) =>
+                      (i + ABOUT_GALLERY_IMAGES.length - 1) %
+                      ABOUT_GALLERY_IMAGES.length,
+                  );
+                }}
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                aria-label={paused ? "Resume slideshow" : "Pause slideshow"}
+                onClick={() => setPaused(!paused)}
+                disabled={!!reducedMotion}
+              >
+                {paused || reducedMotion ? (
+                  <Play size={16} />
+                ) : (
+                  <Pause size={16} />
+                )}
+              </button>
+              <button
+                aria-label="Next photo"
+                onClick={() => {
+                  setPaused(true);
+                  setSlideIndex((i) => (i + 1) % ABOUT_GALLERY_IMAGES.length);
+                }}
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
 
-          <div className="absolute -top-10 -right-10 w-48 h-48 pointer-events-none hidden md:block"
-            style={{ background: 'radial-gradient(circle, rgba(217,70,239,0.06) 0%, transparent 70%)' }} />
+          <div
+            className="absolute -top-10 -right-10 w-48 h-48 pointer-events-none hidden md:block"
+            style={{
+              background:
+                "radial-gradient(circle, rgba(217,70,239,0.06) 0%, transparent 70%)",
+            }}
+          />
 
-          <div className="absolute bottom-4 left-4 z-20 font-mono text-[8px] bg-slate-950/85 backdrop-blur-sm px-2.5 py-1.5 border border-fuchsia-500/35 text-fuchsia-400 uppercase tracking-widest">
-            IMG_REF: TALENT_CHAMP_2024.LOG
+          <div className="absolute bottom-4 left-4 z-20 font-mono text-[12px] bg-slate-950/85 backdrop-blur-sm px-2.5 py-1.5 border border-fuchsia-500/35 text-fuchsia-400 uppercase tracking-widest">
+            Photo {slideIndex + 1} / {ABOUT_GALLERY_IMAGES.length}
           </div>
         </motion.div>
 
         {/* Text column */}
         <div className="space-y-6 md:space-y-10">
-          <SectionHeader title="The Origin" subtitle="System_Profile" />
+          <SectionHeader title="The Origin" subtitle="Meet Mia" />
 
           <p className="text-lg md:text-xl lg:text-2xl text-slate-300 leading-relaxed font-light italic">
             {
@@ -165,7 +226,7 @@ export default function About() {
             }
           </p>
 
-          <p className="text-slate-500 leading-relaxed text-sm">
+          <p className="text-slate-400 leading-relaxed text-sm">
             {
               "Along the way, she's continued to push herself—refining her vocals and guitar work and adding new depth to her sound—growing into an artist who connects just as much as she impresses."
             }
@@ -183,7 +244,7 @@ export default function About() {
               <h4 className="font-bold text-white uppercase tracking-tighter text-sm md:text-base mb-1">
                 1st Place Win
               </h4>
-              <p className="text-[9px] md:text-[10px] text-slate-500 uppercase font-mono tracking-widest">
+              <p className="text-[12px] md:text-[12px] text-slate-400 uppercase font-mono tracking-widest">
                 7th Grade Talent Show
               </p>
             </motion.div>
@@ -196,10 +257,10 @@ export default function About() {
                 <Guitar size={22} />
               </div>
               <h4 className="font-bold text-white uppercase tracking-tighter text-sm md:text-base mb-1">
-                Debut preformance
+                Debut performance
               </h4>
-              <p className="text-[9px] md:text-[10px] text-slate-500 uppercase font-mono tracking-widest leading-relaxed">
-                First preformance at Ashleys Bar and Resturant
+              <p className="text-[12px] md:text-[12px] text-slate-400 uppercase font-mono tracking-widest leading-relaxed">
+                First performance at Ashleys Bar and Restaurant
               </p>
             </motion.div>
           </div>
@@ -210,8 +271,8 @@ export default function About() {
       <div className="max-w-7xl mx-auto mt-14 md:mt-28">
         <div className="flex items-center gap-4 mb-8 md:mb-10">
           <div className="w-8 h-[2px] bg-fuchsia-500 shrink-0" />
-          <span className="text-fuchsia-500 font-mono tracking-widest text-[10px] uppercase">
-            Journey_Log
+          <span className="text-fuchsia-500 font-mono tracking-widest text-[12px] uppercase">
+            The journey so far
           </span>
         </div>
 
@@ -225,17 +286,21 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
               className={`flex gap-4 py-5 border-b border-white/5 ${
-                m.highlight ? 'border-b-fuchsia-500/20' : ''
+                m.highlight ? "border-b-fuchsia-500/20" : ""
               }`}
             >
-              <div className={`w-0.5 shrink-0 self-stretch mt-1 ${m.highlight ? 'bg-fuchsia-500' : 'bg-white/10'}`} />
+              <div
+                className={`w-0.5 shrink-0 self-stretch mt-1 ${m.highlight ? "bg-fuchsia-500" : "bg-white/10"}`}
+              />
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className={`font-mono text-[10px] tracking-widest uppercase ${m.highlight ? 'text-fuchsia-500' : 'text-white/30'}`}>
+                  <span
+                    className={`font-mono text-[12px] tracking-widest uppercase ${m.highlight ? "text-fuchsia-500" : "text-white/30"}`}
+                  >
                     {m.year}
                   </span>
                   {m.highlight && (
-                    <span className="text-[8px] uppercase tracking-widest text-black bg-fuchsia-500 px-1.5 py-0.5 font-bold">
+                    <span className="text-[12px] uppercase tracking-widest text-black bg-fuchsia-500 px-1.5 py-0.5 font-bold">
                       Winner
                     </span>
                   )}
@@ -243,7 +308,9 @@ export default function About() {
                 <h4 className="font-black italic uppercase tracking-tighter text-white text-base mb-1">
                   {m.title}
                 </h4>
-                <p className="text-slate-500 text-xs leading-relaxed">{m.detail}</p>
+                <p className="text-slate-400 text-xs leading-relaxed">
+                  {m.detail}
+                </p>
               </div>
             </motion.div>
           ))}
@@ -259,25 +326,29 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               className={`pt-8 pr-8 border-b border-r border-white/5 pb-8 group ${
-                m.highlight ? 'border-b-fuchsia-500/20' : ''
+                m.highlight ? "border-b-fuchsia-500/20" : ""
               }`}
             >
-              <span className={`font-mono text-xs tracking-widest uppercase ${m.highlight ? 'text-fuchsia-500' : 'text-white/30'}`}>
+              <span
+                className={`font-mono text-xs tracking-widest uppercase ${m.highlight ? "text-fuchsia-500" : "text-white/30"}`}
+              >
                 {m.year}
               </span>
               {m.highlight && (
-                <span className="ml-3 text-[9px] uppercase tracking-widest text-black bg-fuchsia-500 px-2 py-0.5 font-bold">
+                <span className="ml-3 text-[12px] uppercase tracking-widest text-black bg-fuchsia-500 px-2 py-0.5 font-bold">
                   Winner
                 </span>
               )}
               <h4 className="font-black italic uppercase tracking-tighter text-white text-lg mt-3 mb-2 group-hover:text-fuchsia-400 transition-colors">
                 {m.title}
               </h4>
-              <p className="text-slate-500 text-sm leading-relaxed">{m.detail}</p>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                {m.detail}
+              </p>
             </motion.div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

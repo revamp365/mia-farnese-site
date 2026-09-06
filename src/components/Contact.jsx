@@ -1,29 +1,38 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { MessageSquare, Youtube, Instagram, Send } from 'lucide-react'
-import emailjs from '@emailjs/browser'
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { MessageSquare, Youtube, Instagram, Send } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
-const inputClass =
-  'w-full px-4 py-3 bg-transparent border border-white/8 text-slate-100 placeholder:text-slate-600 text-sm font-mono focus:outline-none focus:border-fuchsia-500/50 transition-colors duration-300'
-
-const tags = ['Live_Showcase', 'Studio_Guest', 'Acoustic_Set', 'Artist_Collab']
+const tags = [
+  "Live performances",
+  "School events",
+  "Acoustic sets",
+  "Collaborations",
+];
+const emptyForm = {
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
+  inquiry: "Booking",
+  eventDate: "",
+  location: "",
+};
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+  const [formData, setFormData] = useState(emptyForm);
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) =>
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    if (isSubmitting) return;
+    setError("");
+    setIsSubmitting(true);
     try {
       await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -31,24 +40,38 @@ export default function Contact() {
         {
           from_name: formData.name,
           from_email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-          to_email: 'drew@revamp365.net',
+          subject: `${formData.inquiry}: ${formData.subject}`,
+          message: [
+            `Inquiry: ${formData.inquiry}`,
+            ...(formData.inquiry === "Booking"
+              ? [
+                  `Event date: ${formData.eventDate || "Not decided"}`,
+                  `Location: ${formData.location || "Not decided"}`,
+                ]
+              : []),
+            "",
+            formData.message,
+          ].join("\n"),
+          to_email: "drew@revamp365.net",
         },
-        import.meta.env.VITE_EMAILJS_USER_ID
-      )
-      setSubmitted(true)
-      setFormData({ name: '', email: '', subject: '', message: '' })
+        import.meta.env.VITE_EMAILJS_USER_ID,
+      );
+      setSubmitted(true);
+      setFormData(emptyForm);
     } catch (err) {
-      console.error('Email error:', err)
-      alert('There was an error sending your message. Please try again.')
+      setError(
+        "Your message could not be sent. Your details are still here—please try again, or reach Mia on Instagram.",
+      );
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
-    <section id="contact" className="py-16 md:py-32 px-6 md:px-16 lg:px-24 bg-slate-950 relative overflow-hidden">
+    <section
+      id="contact"
+      className="py-16 md:py-24 px-6 md:px-16 lg:px-24 bg-slate-950 relative overflow-hidden"
+    >
       {/* Top accent line */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-fuchsia-500/40 to-transparent" />
 
@@ -56,7 +79,8 @@ export default function Contact() {
       <div
         className="absolute top-0 right-0 w-80 h-80 pointer-events-none"
         style={{
-          background: 'radial-gradient(circle, rgba(217,70,239,0.04) 0%, transparent 70%)',
+          background:
+            "radial-gradient(circle, rgba(217,70,239,0.04) 0%, transparent 70%)",
         }}
       />
 
@@ -70,8 +94,8 @@ export default function Contact() {
             className="flex items-center justify-center gap-4 mb-3"
           >
             <div className="w-8 h-[2px] bg-fuchsia-500" />
-            <span className="text-fuchsia-500 font-mono tracking-widest text-[10px] uppercase">
-              Secure_Line
+            <span className="text-fuchsia-500 font-mono tracking-widest text-[12px] uppercase">
+              Bookings & hello
             </span>
             <div className="w-8 h-[2px] bg-fuchsia-500" />
           </motion.div>
@@ -81,7 +105,7 @@ export default function Contact() {
             viewport={{ once: true }}
             className="text-3xl sm:text-4xl md:text-6xl font-black text-white italic uppercase tracking-tighter"
           >
-            Establish Contact
+            Get in Touch
           </motion.h2>
         </div>
 
@@ -93,9 +117,6 @@ export default function Contact() {
             viewport={{ once: true }}
             className="p-5 sm:p-7 md:p-10 border border-white/8 bg-white/[0.01] relative"
           >
-            <div className="absolute top-0 right-0 p-3 font-mono text-[8px] text-white/15 uppercase tracking-widest">
-              MF_COMMS_v1
-            </div>
 
             <h3 className="text-lg md:text-xl font-black italic uppercase tracking-tighter text-white mb-6 md:mb-8 flex items-center gap-3">
               <MessageSquare size={18} className="text-fuchsia-500 shrink-0" />
@@ -103,72 +124,148 @@ export default function Contact() {
             </h3>
 
             {submitted ? (
-              <div className="py-10 text-center">
+              <div className="py-10 text-center" role="status">
                 <div className="w-10 h-10 border border-fuchsia-500/40 flex items-center justify-center mx-auto mb-5">
                   <Send size={16} className="text-fuchsia-400" />
                 </div>
                 <p className="text-white font-mono text-sm uppercase tracking-widest mb-2">
-                  Transmission Received
+                  Message sent
                 </p>
-                <p className="text-slate-500 text-xs font-mono">
-                  We will respond shortly.
+                <p className="text-slate-400 text-xs font-mono">
+                  Thanks for reaching out to Mia’s team.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="mt-6 text-[10px] uppercase tracking-widest text-fuchsia-500/50 hover:text-fuchsia-400 transition-colors font-mono"
+                  className="mt-6 text-[12px] uppercase tracking-widest text-fuchsia-500/50 hover:text-fuchsia-400 transition-colors font-mono"
                 >
                   Send another
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-                  <input
-                    name="name"
-                    value={formData.name}
+              <form
+                onSubmit={handleSubmit}
+                className="booking-form"
+                aria-busy={isSubmitting}
+              >
+                <label>
+                  What brings you here?
+                  <select
+                    name="inquiry"
+                    value={formData.inquiry}
                     onChange={handleChange}
-                    placeholder="// your_name"
-                    className={inputClass}
-                    required
-                  />
-                  <input
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="// email_address"
-                    className={inputClass}
-                    required
-                  />
+                  >
+                    <option>Booking</option>
+                    <option>Collaboration</option>
+                    <option>General message</option>
+                  </select>
+                </label>
+                <div className="booking-row">
+                  <label>
+                    Your name
+                    <input
+                      name="name"
+                      autoComplete="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
+                  <label>
+                    Email address
+                    <input
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </label>
                 </div>
-                <input
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  placeholder="// subject_line"
-                  className={inputClass}
-                  required
-                />
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder="// your_message..."
-                  rows={5}
-                  className={`${inputClass} resize-none`}
-                  required
-                />
+                {formData.inquiry === "Booking" && (
+                  <fieldset>
+                    <legend>
+                      A few event details <span>(optional)</span>
+                    </legend>
+                    <div className="booking-row">
+                      <label>
+                        Event date
+                        <input
+                          type="date"
+                          name="eventDate"
+                          value={formData.eventDate}
+                          onChange={handleChange}
+                        />
+                      </label>
+                      <label>
+                        Town or venue
+                        <input
+                          name="location"
+                          value={formData.location}
+                          onChange={handleChange}
+                          placeholder="Where is the event?"
+                        />
+                      </label>
+                    </div>
+                    <p className="booking-hint">
+                      Still planning? Leave these blank and tell us what you
+                      have in mind.
+                    </p>
+                  </fieldset>
+                )}
+                <label>
+                  Subject
+                  <input
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                    placeholder={
+                      formData.inquiry === "Booking"
+                        ? "e.g. Acoustic set for a private event"
+                        : "What would you like to talk about?"
+                    }
+                  />
+                </label>
+                <label>
+                  Your message
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={4}
+                    required
+                    placeholder={
+                      formData.inquiry === "Booking"
+                        ? "Tell us about the event, the audience, and how long you would like Mia to play."
+                        : "Leave a note for Mia’s team."
+                    }
+                  />
+                </label>
+                {error && (
+                  <p className="booking-error" role="alert">
+                    {error}{" "}
+                    <a
+                      href="https://www.instagram.com/miaamusic_/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Open Instagram ↗
+                    </a>
+                  </p>
+                )}
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="group relative w-full px-6 py-4 bg-fuchsia-600 hover:bg-fuchsia-500 transition-colors overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="primary-action w-full"
                 >
-                  <span className="absolute inset-0 bg-white/15 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                  <span className="relative flex items-center justify-center gap-3 font-bold uppercase tracking-[0.15em] text-[11px] text-white">
-                    <Send size={13} />
-                    {isSubmitting ? 'Transmitting...' : 'Send Message'}
-                  </span>
+                  <Send size={16} />
+                  {isSubmitting ? "Sending…" : "Send message"}
                 </button>
+                <p className="booking-hint">
+                  Your note goes to Mia’s team. A booking is confirmed only
+                  after you hear back.
+                </p>
               </form>
             )}
           </motion.div>
@@ -182,25 +279,38 @@ export default function Contact() {
           >
             {/* Social links */}
             <div>
-              <h4 className="text-white/40 font-mono text-[10px] uppercase tracking-[0.2em] mb-4">
-                Signal_Grid
+              <h4 className="text-white/40 font-mono text-[12px] uppercase tracking-[0.2em] mb-4">
+                Follow Mia
               </h4>
               <div className="flex gap-6">
                 <button
-                  onClick={() => window.open('https://www.youtube.com/@MiaEF10', '_blank')}
+                  onClick={() =>
+                    window.open("https://www.youtube.com/@MiaEF10", "_blank")
+                  }
                   className="flex items-center gap-2 group/link"
                 >
-                  <Youtube size={18} className="text-white group-hover/link:text-fuchsia-500 transition-colors" />
-                  <span className="text-[10px] font-mono tracking-widest text-white/50 group-hover/link:text-fuchsia-500 transition-colors">
+                  <Youtube
+                    size={18}
+                    className="text-white group-hover/link:text-fuchsia-500 transition-colors"
+                  />
+                  <span className="text-[12px] font-mono tracking-widest text-white/50 group-hover/link:text-fuchsia-500 transition-colors">
                     YOUTUBE
                   </span>
                 </button>
                 <button
-                  onClick={() => window.open('https://www.instagram.com/miaamusic_/', '_blank')}
+                  onClick={() =>
+                    window.open(
+                      "https://www.instagram.com/miaamusic_/",
+                      "_blank",
+                    )
+                  }
                   className="flex items-center gap-2 group/link"
                 >
-                  <Instagram size={18} className="text-white group-hover/link:text-fuchsia-500 transition-colors" />
-                  <span className="text-[10px] font-mono tracking-widest text-white/50 group-hover/link:text-fuchsia-500 transition-colors">
+                  <Instagram
+                    size={18}
+                    className="text-white group-hover/link:text-fuchsia-500 transition-colors"
+                  />
+                  <span className="text-[12px] font-mono tracking-widest text-white/50 group-hover/link:text-fuchsia-500 transition-colors">
                     INSTAGRAM
                   </span>
                 </button>
@@ -210,18 +320,19 @@ export default function Contact() {
             {/* Availability */}
             <div>
               <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-3 md:mb-4">
-                Availability_Matrix
+                Bring music to your event
               </h4>
               <p className="text-slate-400 text-sm md:text-base leading-relaxed mb-6 md:mb-8">
-                Currently accepting inquiries for live performances, school events, and creative
-                collaborations. Please reach out at least 2 weeks in advance.
+                Currently accepting inquiries for live performances, school
+                events, and creative collaborations. Please reach out at least 2
+                weeks in advance.
               </p>
 
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1.5 bg-fuchsia-500/5 border border-fuchsia-500/20 text-fuchsia-500 text-[9px] uppercase font-mono tracking-tight"
+                    className="px-3 py-1.5 bg-fuchsia-500/5 border border-fuchsia-500/20 text-fuchsia-500 text-[12px] uppercase font-mono tracking-tight"
                   >
                     {tag}
                   </span>
@@ -231,14 +342,14 @@ export default function Contact() {
 
             {/* Status */}
             <div className="pt-5 border-t border-white/5">
-              <p className="text-[10px] font-mono text-slate-600 uppercase tracking-widest">
-                Current Status:{' '}
-                <span className="text-emerald-500 animate-pulse">Online & Ready</span>
+              <p className="text-[12px] font-mono text-slate-400 uppercase tracking-widest">
+                Booking inquiries:{" "}
+                <span className="text-emerald-500 animate-pulse">Welcome</span>
               </p>
             </div>
           </motion.div>
         </div>
       </div>
     </section>
-  )
+  );
 }
